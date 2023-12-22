@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { FirebaseAuthProvider, FirebaseAuthConsumer } from '@react-firebase/auth';
 
 export default function App() {
   return (

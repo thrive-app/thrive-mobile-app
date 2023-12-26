@@ -5,25 +5,41 @@ import { StyleSheet,
          useColorScheme,
          useWindowDimensions,
          TouchableOpacity} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useTheme} from '@react-navigation/native'
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
 import { TabView, TabBar } from "react-native-tab-view"
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from 'expo-web-browser';
+import { 
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential
+} from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { auth } from "../firebaseConfig"
 
-const LoginPage = () => {
 
+
+const LoginPage = ({ async, theme }) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
   //const dark_logo = "../app_assets/dark_logo.png"
   const light_logo = "../assets/light_logo.png"
   //const scheme = useColorScheme();
-  const { colors } = useTheme();
+  const { colors } = theme
+  //const { colors } = useTheme();
   //console.log(scheme === "dark" ? dark_logo : light_logo)
   const [routes] = useState([
     {key: "register", title: "Register"},
     {key: "signIn", title: "Sign In"}
   ]);
   const [index, setIndex] = useState(0);
+
+ 
+
+
+
 
   const Register = () => (
     <>
@@ -32,8 +48,8 @@ const LoginPage = () => {
         <Text style={styles.buttonText}>Register with Email</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <SimpleLineIcons name="social-google" size={28} color="white" style={styles.icons}/>
+      <TouchableOpacity style={styles.button} onPress={() => {async()}}>
+        <SimpleLineIcons name="social-google" size={28} color="white" style={styles.icons} />
         <Text style={styles.buttonText}>Register with Google</Text>
       </TouchableOpacity>
 
@@ -121,7 +137,6 @@ const LoginPage = () => {
       />
       <Text style={styles.text}>Your future at your fingertips.</Text>
       <TabView
-      
         renderTabBar={props => (
           <TabBar
           indicatorStyle={{ backgroundColor: colors.primary, height: 2 }}

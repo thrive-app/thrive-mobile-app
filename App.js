@@ -1,9 +1,27 @@
 import { StyleSheet,useColorScheme} from 'react-native';
 import LoginPage from "./screens/LoginPage";
+import {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native'
 import { createNativeStackNavigator} from '@react-navigation/native-stack';
+import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import { 
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential
+} from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { auth } from "./firebaseConfig"
+import {GOOGLE_ANDROID_CLIENT_ID, GOOGLE_APPLE_CLIENT_ID, GOOGLE_EXPO_CLIENT_ID} from "@env"
+import { Constants } from 'expo-constants';
 
+//const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@akshayp1/thrive' };
+//const NATIVE_REDIRECT_PARAMS = { native: "myapp://" };
+//const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+//const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
 
+WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -33,15 +51,33 @@ export default function App() {
     }
   }
 
+
+  const [userInfo, setUserInfo] = useState();
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+    iosClientId: GOOGLE_APPLE_CLIENT_ID, 
+    expoClientId: GOOGLE_EXPO_CLIENT_ID
+  });
+
+  useEffect(() => {
+    if(response?.type == "success") {
+      const { id_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token)
+      signInWithCredential(auth, credential);
+    }
+  }, [response])
+
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Login"
-          component={LoginPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <LoginPage async={() => {promptAsync()}} theme={scheme === 'dark' ? DarkTheme : DefaultTheme} />
+    //<NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      //<Stack.Navigator>
+        //<Stack.Screen
+          //options={{headerShown: false}}
+          //name="Login"
+          //component={LoginPage}
+          //initialParams={{async: () => {promptAsync()}}} />
+      //</Stack.Navigator>
+    //</NavigationContainer>
   );
 
   

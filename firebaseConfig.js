@@ -10,9 +10,9 @@ import {
 } from "@env"
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getStorage } from "firebase/storage"
-import { ReactNativeAsyncStorage } from "@react-native-async-storage/async-storage";
+import { useAuth } from "@clerk/clerk-expo";
 
 
 
@@ -31,12 +31,30 @@ const firebaseConfig = {
   measurementId: MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-});
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    const signInWithClerk = async () => {
+      const auth = getAuth();
+      const token = await getToken({ template: "integration_firebase" });
+      const userCredentials = await signInWithCustomToken(auth, token);
+ 
+      /**
+       * The userCredentials.user object will call the methods of
+       * the Firebase platform as an authenticated user.
+       */
+      console.log("user ::", userCredentials.user);
+    };
+
+    signInWithClerk()
+}, []);
+
+
+// Initialize Firebase
+//const app = initializeApp(firebaseConfig);
+
+//const auth = getAuth();
 
 const storage = getStorage(app);
 

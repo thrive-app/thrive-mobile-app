@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "com.akshayp1.thrive",
     "name": "thrive",
     "slug": "thrive",
     "version": "1.0.0",
@@ -15,16 +16,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.akshayp1.thrive"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.akshayp1.thrive"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "50e2f33c-443b-4b44-84dc-ed59d9ab678a"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

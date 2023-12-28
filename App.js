@@ -1,57 +1,25 @@
-import { StyleSheet,useColorScheme} from 'react-native';
-import LoginPage from "./screens/LoginPage";
+import { StyleSheet,useColorScheme } from 'react-native';
+import Navigation from './Navigation';
 import {NavigationContainer} from '@react-navigation/native'
 import { createNativeStackNavigator} from '@react-navigation/native-stack';
-
-
+import { SafeAreaProvider } from 'react-native-safe-area-context'; 
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+import { StatusBar } from 'expo-status-bar';
+import { tokenCache } from './tokenCache';
+import { VITE_CLERK_PUBLISHABLE_KEY } from "@env"
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
-  const scheme = useColorScheme();
-  const DefaultTheme = {
-    dark: false,
-    colors: {
-      primary: 'rgb(140,82,255)', //purple
-      background: 'rgb(248,246,253)', //very pale purple
-      card: 'rgb(9,6,16)', //purple-tinted black
-      text: 'rgb(0,0,0)', //black
-      border: 'rgb(9,6,16)', //purple-tinted black
-      notification: 'rgb(255,99,71)' //tomato
-    }
-  }
-
-
-  const DarkTheme = {
-    dark: true,
-    colors: {
-      primary: 'rgb(140,82,255)', //purple
-      background: 'rgb(9,6,16)', //purple-tinted black
-      card: 'rgb(248,246,253)', //very pale purple
-      text: 'rgb(255,255,255)', //white
-      border: 'rgb(248,246,253)', //very pale purple
-      notification: 'rgb(255,99,71)' //tomato
-    }
-  }
-
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Login"
-          component={LoginPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+  <ClerkProvider 
+    publishableKey={VITE_CLERK_PUBLISHABLE_KEY}
+    tokenCache={tokenCache}
+  >
+    <SafeAreaProvider> 
+      <Navigation />
+      <StatusBar />
+    </SafeAreaProvider>
+  </ClerkProvider>
   );
-
-  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+

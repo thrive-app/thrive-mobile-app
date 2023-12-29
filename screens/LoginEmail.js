@@ -6,7 +6,8 @@ import {
     useWindowDimensions,
     TouchableOpacity,
     TextInput,
-    Button
+    Button,
+    SafeAreaView
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
@@ -45,22 +46,33 @@ const LoginEmail = ({ navigation, route }) => {
     })
 
     return (
-        <View style={styles.container}>
+        
+      <SafeAreaView style={styles.container}>
+        <View className="flex items-center mx-4 space-y-4">
             <Image
-                source={
-                    require(hat_logo)
-                }
-            />
-            
-                
-            <TextInput placeholder="Email" placeholderTextColor={"gray"} />
-            <TextInput placeholder="Password" placeholderTextColor={"gray"} />
+            source={
+                require(hat_logo)
+            }
+        />
+            <View className="bg-black/5 p-5 rounded-2xl w-full">
+                <TextInput placeholder="Email" placeholderTextColor={"gray"} />
+            </View>
 
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-            <Button title="Go back" onPress={() => {navigation.navigate("Login")}} />
-        </View>
+            <View className="bg-black/5 p-5 rounded-2xl w-full">
+                <TextInput placeholder="Password" placeholderTextColor={"gray"} />
+            </View>
+
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Login")}>
+                    <Text style={styles.buttonText}>Back</Text>
+                </TouchableOpacity>
+            </View>
+      </SafeAreaView> 
+
+    
     )
 
 }

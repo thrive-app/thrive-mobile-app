@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'; 
 
 
 const LoginEmail = ({ navigation, route }) => {
@@ -46,8 +47,18 @@ const LoginEmail = ({ navigation, route }) => {
     })
 
     return (
-        
+      <>
+      <TouchableOpacity style={{
+            backgroundColor: colors.primary,
+            borderRadius: 25,
+            width: "10%",
+            marginTop: 75,
+            alignItems: "center"
+        }} onPress={() => navigation.navigate("Login")}>
+            <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>  
       <SafeAreaView style={styles.container}>
+        
         <View className="flex items-center mx-4 space-y-4">
             <Image
             source={
@@ -65,12 +76,9 @@ const LoginEmail = ({ navigation, route }) => {
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Login")}>
-                    <Text style={styles.buttonText}>Back</Text>
-                </TouchableOpacity>
             </View>
       </SafeAreaView> 
+      </>
 
     
     )

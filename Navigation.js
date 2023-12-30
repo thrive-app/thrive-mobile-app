@@ -1,10 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {useContext} from 'react'
 import { useColorScheme } from "react-native";
 import LoginPage from "./screens/LoginPage";
 import Welcome from "./screens/Welcome";
 import { ClerkLoaded, useUser } from "@clerk/clerk-expo"
 import LoginEmail from "./screens/LoginEmail";
+import ThemeContext from "./contexts/ThemeContext";
 
 const DefaultTheme = {
     dark: false,
@@ -30,9 +32,9 @@ const DefaultTheme = {
     }
   }
 export default function Navigation () {
-    const scheme = useColorScheme();
+    const { theme } = useContext(ThemeContext)
     return (
-        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
             <RootNavigator />
         </NavigationContainer>
     );

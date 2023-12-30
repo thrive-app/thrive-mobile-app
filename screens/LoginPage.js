@@ -5,20 +5,25 @@ import { StyleSheet,
          useColorScheme,
          useWindowDimensions,
          TouchableOpacity,
-         Button} from 'react-native'
-import React, { useEffect, useState, useCallback } from 'react'
+         Button,
+         Alert} from 'react-native'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import {useTheme} from '@react-navigation/native'
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
 import { TabView, TabBar } from "react-native-tab-view"
-import { useOAuth } from '@clerk/clerk-expo'
+import { useOAuth, useAuth } from '@clerk/clerk-expo'
+import ThemeContext from '../contexts/ThemeContext'
+import ThemeSwitch from '../components/ThemeSwitch'
+import { auth } from "../firebaseConfig"
 
 
 const LoginPage = ({ navigation }) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
-  //const dark_logo = "../app_assets/dark_logo.png"
+  const dark_logo = "../assets/dark_logo.png"
   const light_logo = "../assets/light_logo.png"
-  //const scheme = useColorScheme(); 
+  const { theme } = useContext(ThemeContext)
+  const logoToUse = theme === "dark" ? require(dark_logo) : require(light_logo)
   const { colors } = useTheme();
   //console.log(scheme === "dark" ? dark_logo : light_logo)
   const [routes] = useState([
@@ -27,16 +32,53 @@ const LoginPage = ({ navigation }) => {
   ]);
   
 
-  const { startOAuthFlow }= useOAuth({ strategy: "oauth_google" })
+  
+  const signInWithClerk = async () => {
+    const { getToken } = useAuth();
+    const token = await getToken({ template: "integration_firebase" });
+    const userCredentials = await signInWithCustomToken(auth, token);
+
+    /**
+     * The userCredentials.user object will call the methods of
+     * the Firebase platform as an authenticated user.
+     */
+    console.log("user ::", userCredentials.user);
+  };
+  
+  
+
+
+  const googleOAuthFlow = useOAuth({ strategy: "oauth_google" }).startOAuthFlow
+  const linkedInOAuthFlow = useOAuth({ strategy: "oauth_linkedin_oidc" }).startOAuthFlow
 
   const onPressGoogle = useCallback(async () => {
     try {
       console.log(1)
-      const { createdSessionId, signIn, signUp, setActive} = await startOAuthFlow();
+      const { createdSessionId, signIn, signUp, setActive} = await googleOAuthFlow();
+      console.log(2)
+      if (createdSessionId) { 
+        console.log(3)//login info wasn't in cache prior to starting OAuth flow
+        //useEffect(() => {signInWithClerk()}, []);
+        console.log(3.5)
+        setActive({ session: createdSessionId})
+        console.log(4)
+      }  //add else and use signIn or signUp for MFA
+    } catch (err) {
+      Alert.alert("Authentication error", err)
+    }
+      
+  }, [])
+
+  const onPressLinkedIn = useCallback(async () => {
+    try {
+      console.log(1)
+      const { createdSessionId, signIn, signUp, setActive} = await linkedInOAuthFlow();
       console.log(2)
       if (createdSessionId) { 
         console.log(3)//login info wasn't in cache prior to starting OAuth flow
         setActive({ session: createdSessionId})
+        console.log(3.5)
+        //useEffect(() => {signInWithClerk()}, []);
         console.log(4)
       }  //add else and use signIn or signUp for MFA
     } catch (err) {
@@ -60,7 +102,7 @@ const LoginPage = ({ navigation }) => {
         <Text style={styles.buttonText}>Register with Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => {onPressLinkedIn()}}>
         <SimpleLineIcons name="social-linkedin" size={28} color="white" style={styles.icons}/>
         <Text style={styles.buttonText}>Register with LinkedIn</Text>
       </TouchableOpacity>
@@ -79,7 +121,7 @@ const LoginPage = ({ navigation }) => {
         <Text style={styles.buttonText}>Sign in with Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => {onPressLinkedIn()}}>
         <SimpleLineIcons name="social-linkedin" size={28} color="white" style={styles.icons}/>
         <Text style={styles.buttonText}>Sign in with LinkedIn</Text>
       </TouchableOpacity>
@@ -134,9 +176,10 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ThemeSwitch />
       <Image
         source={
-          require(light_logo)
+          logoToUse
         }
         style={styles.logo}
         width={200}
@@ -148,7 +191,7 @@ const LoginPage = ({ navigation }) => {
           indicatorStyle={{ backgroundColor: colors.primary, height: 2 }}
             {...props}
             renderLabel={({ route }) => (
-              <Text style={{ color: 'black', margin: 8 }}>
+              <Text style={{ color: colors.text, margin: 8 }}>
                 {route.title}
               </Text>
             )}

@@ -12,7 +12,7 @@ const Welcome = () => {
         backgroundColor: colors.background
     },
     text: {
-        fontWeight: "bold",
+        fontFamily: "DMSansBold",
         color: colors.text
     }
 })

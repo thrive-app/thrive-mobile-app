@@ -16,22 +16,76 @@ import { useOAuth, useAuth } from '@clerk/clerk-expo'
 import ThemeContext from '../contexts/ThemeContext'
 import ThemeSwitch from '../components/ThemeSwitch'
 import { auth } from "../firebaseConfig"
+import DarkLogoSVG from '../assets/DarkLogoSVG'
+import LightLogoSVG from '../assets/LightLogoSVG'
+
+
 
 
 const LoginPage = ({ navigation }) => {
-  const {height, width, scale, fontScale} = useWindowDimensions();
-  const dark_logo = "../assets/dark_logo.png"
-  const light_logo = "../assets/light_logo.png"
-  const { theme } = useContext(ThemeContext)
-  const logoToUse = theme === "dark" ? require(dark_logo) : require(light_logo)
+
   const { colors } = useTheme();
-  //console.log(scheme === "dark" ? dark_logo : light_logo)
+
+  const styles = StyleSheet.create({
+    image: {
+      alignSelf: "center",
+      padding: "20%",
+      marginTop: "15%"
+    },
+    text: {
+        color: colors.text,
+        fontSize: 18,
+        fontFamily: 'DMSansBold',
+        padding: "5%", 
+        textAlign: "center",
+        alignSelf: "center"
+    },
+    buttonText : {
+      color: "white",
+      fontFamily: 'DMSansMedium',
+      textAlign: "center",
+      fontSize: 16
+    },
+    container: {
+        flex: 1,
+        backgroundColor: colors.background,
+        alignContent: "center",
+        justifyContent: "center"
+      },
+    button: {
+        backgroundColor: colors.primary,
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        marginTop: 10,
+        marginBottom: 10,
+        marginHorizontal: "8%",
+        flexDirection:"row",
+        alignItems: "center",
+        alignSelf: 'center',
+        padding: 10,
+        gap: 15
+    },
+    logo: {
+      left: "2%",
+    },
+    icons: {
+      position: "relative",
+      paddingRight: 10
+    },
+    tabView: {
+      backgroundColor: colors.background,
+      
+    }
+})
+
+  const { theme } = useContext(ThemeContext)
+  
+  const logoToUse = theme === "light" ? <LightLogoSVG height={100} width={325} style={styles.image} /> : <DarkLogoSVG height={100} width={325} style={styles.image} />
   const [routes] = useState([
     {key: "register", title: "Register"},
     {key: "signIn", title: "Sign In"}
   ]);
-  
-
   
   const signInWithClerk = async () => {
     const { getToken } = useAuth();
@@ -129,61 +183,13 @@ const LoginPage = ({ navigation }) => {
   )
 
 
-  const styles = StyleSheet.create({
-    text: {
-        color: colors.text,
-        fontWeight: "bold", 
-        padding: 20,
-        textAlign: "center",
-        alignSelf: "center"
-    },
-    buttonText : {
-      color: "white",
-      textAlign: "center",
-    },
-    container: {
-        flex: 1,
-        backgroundColor: colors.background,
-        alignContent: "center",
-        justifyContent: "center"
-      },
-    button: {
-        backgroundColor: colors.primary,
-        width: "80%",
-        borderRadius: 25,
-        height: 50,
-        marginTop: 10,
-        marginBottom: 10,
-        marginHorizontal: "8%",
-        flexDirection:"row",
-        alignItems: "center",
-        padding: 10,
-        gap: 15
-    },
-    logo: {
-      left: "2%",
-    },
-    icons: {
-      position: "relative",
-      paddingRight: 10
-    },
-    tabView: {
-      backgroundColor: colors.background,
-      
-    }
-})
+  
 
 
   return (
     <SafeAreaView style={styles.container}>
       <ThemeSwitch />
-      <Image
-        source={
-          logoToUse
-        }
-        style={styles.logo}
-        width={200}
-      />
+      {logoToUse}
       <Text style={styles.text}>Your future at your fingertips.</Text>
       <TabView
         renderTabBar={props => (
@@ -191,7 +197,7 @@ const LoginPage = ({ navigation }) => {
           indicatorStyle={{ backgroundColor: colors.primary, height: 2 }}
             {...props}
             renderLabel={({ route }) => (
-              <Text style={{ color: colors.text, margin: 8 }}>
+              <Text style={{ color: colors.text, margin: 8, fontSize:18, fontFamily: "DMSansMedium" }}>
                 {route.title}
               </Text>
             )}
@@ -210,7 +216,7 @@ const LoginPage = ({ navigation }) => {
           }
         }}
         onIndexChange={setIndex}
-        initialLayout={{width: width}}
+        initialLayout={{width: "100%"}}
         />
     </SafeAreaView>
   )

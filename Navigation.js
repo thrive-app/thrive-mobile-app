@@ -7,7 +7,7 @@ import Welcome from "./screens/Welcome";
 import { ClerkLoaded, useUser } from "@clerk/clerk-expo"
 import LoginEmail from "./screens/LoginEmail";
 import ThemeContext from "./contexts/ThemeContext";
-
+import { useFonts } from "expo-font";
 const DefaultTheme = {
     dark: false,
     colors: {
@@ -31,8 +31,14 @@ const DefaultTheme = {
       notification: 'rgb(255,99,71)' //tomato
     }
   }
+  
 export default function Navigation () {
     const { theme } = useContext(ThemeContext)
+      const [fontsLoaded, fontError] = useFonts ({
+          DMSansRegular: require('./assets/fonts/DMSans-Regular.ttf'),
+          DMSansMedium: require('./assets/fonts/DMSans-Medium.ttf'),
+          DMSansBold: require('./assets/fonts/DMSans-Bold.ttf')
+      })
     return (
         <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
             <RootNavigator />

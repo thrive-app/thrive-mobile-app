@@ -12,6 +12,7 @@ import {
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'; 
+import HatSVG from '../assets/HatSVG'
 
 
 const LoginEmail = ({ navigation, route }) => {
@@ -26,6 +27,8 @@ const LoginEmail = ({ navigation, route }) => {
         },
         buttonText: {
             color: "white",
+            fontFamily: "DMSansBold",
+            fontSize: 16
         },
         container: {
             flex: 1,
@@ -44,6 +47,10 @@ const LoginEmail = ({ navigation, route }) => {
             marginBottom: 10,
             padding: 10
         },
+        inputText: {
+            fontFamily: "DMSansRegular",
+            fontSize: 16
+        }
     })
 
     return (
@@ -60,17 +67,13 @@ const LoginEmail = ({ navigation, route }) => {
       <SafeAreaView style={styles.container}>
         
         <View className="flex items-center mx-4 space-y-4">
-            <Image
-            source={
-                require(hat_logo)
-            }
-        />
+            <HatSVG />
             <View className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="Email" placeholderTextColor={"gray"} />
+                <TextInput  style={styles.inputText} placeholder="Email" placeholderTextColor={"gray"} />
             </View>
 
             <View className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="Password" placeholderTextColor={"gray"} />
+                <TextInput style={styles.inputText} placeholder="Password" placeholderTextColor={"gray"} />
             </View>
 
                 <TouchableOpacity style={styles.button}>

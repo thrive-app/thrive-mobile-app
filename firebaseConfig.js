@@ -1,20 +1,14 @@
-import { 
-        API_KEY,
-        AUTH_DOMAIN,
-        PROJECT_ID,
-        STORAGE_BUCKET,
-        MESSAGING_SENDER_ID,
-        APP_ID,
-        MEASUREMENT_ID,
-        
-} from "@env"
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASUREMENT_ID,
+} from "@env";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import { getStorage } from "firebase/storage"
-import { useAuth } from "@clerk/clerk-expo";
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage'
-
+import firebase from '@react-native-firebase/app'
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -33,10 +27,20 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app, auth
 
-const auth = initializeAuth(app)
+if (!getApps().length) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+    });
+  } catch (error) {
+    console.log("Error initializing app: " + error);
+  }
+} else {
+  app = getApp();
+  auth = getAuth(app);
+}
 
-
-
-export { app, auth }
+export { app, auth };

@@ -2,26 +2,19 @@ import {
   StyleSheet,
   Text,
   SafeAreaView,
-  Image,
-  useColorScheme,
-  useWindowDimensions,
   TouchableOpacity,
-  Button,
   Alert,
 } from "react-native";
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { TabView, TabBar } from "react-native-tab-view";
-import { useOAuth, useAuth } from "@clerk/clerk-expo";
+import { useOAuth } from "@clerk/clerk-expo";
 import ThemeContext from "../contexts/ThemeContext";
 import ThemeSwitch from "../components/ThemeSwitch";
-import { auth } from "../firebaseConfig";
 import DarkLogoSVG from "../assets/DarkLogoSVG";
 import LightLogoSVG from "../assets/LightLogoSVG";
-import { signInWithCustomToken } from "firebase/auth";
-import signInWithClerk from "../functions/signInWithClerk";
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
@@ -92,8 +85,6 @@ const LoginPage = ({ navigation }) => {
     { key: "signIn", title: "Sign In" },
   ]);
 
-  const { getToken } = useAuth();
-
   const googleOAuthFlow = useOAuth({ strategy: "oauth_google" }).startOAuthFlow;
   const linkedInOAuthFlow = useOAuth({
     strategy: "oauth_linkedin_oidc",
@@ -109,7 +100,6 @@ const LoginPage = ({ navigation }) => {
         console.log(3); //login info wasn't in cache prior to starting OAuth flow
         console.log(3.5);
         setActive({ session: createdSessionId });
-        await signInWithClerk(auth, getToken)
         console.log(4);
       } //add else and use signIn or signUp for MFA
     } catch (err) {
@@ -126,7 +116,6 @@ const LoginPage = ({ navigation }) => {
       if (createdSessionId) {
         console.log(3); //login info wasn't in cache prior to starting OAuth flow
         setActive({ session: createdSessionId });
-        await signInWithClerk(auth, getToken)
         console.log(3.5);
         //useEffect(() => {signInWithClerk()}, []);
         console.log(4);

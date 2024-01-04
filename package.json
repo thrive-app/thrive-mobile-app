@@ -22,6 +22,7 @@
     "expo-auth-session": "~5.0.2",
     "expo-constants": "~14.4.2",
     "expo-crypto": "~12.4.1",
+    "expo-dev-client": "~2.4.12",
     "expo-font": "~11.4.0",
     "expo-linking": "~5.0.2",
     "expo-router": "^2.0.0",
@@ -46,13 +47,12 @@
     "react-native-vector-icons": "^10.0.3",
     "react-router-dom": "^6.21.1",
     "react-router-native": "^6.21.1",
-    "tailwindcss": "^3.3.2",
-    "zod": "^3.22.4",
-    "expo-dev-client": "~2.4.12"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "react-native-svg-transformer": "^1.3.0"
+    "react-native-svg-transformer": "^1.3.0",
+    "tailwindcss": "^3.3.2"
   },
   "private": true
 }

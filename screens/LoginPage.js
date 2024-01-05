@@ -12,9 +12,8 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { TabView, TabBar } from "react-native-tab-view";
 import { useOAuth } from "@clerk/clerk-expo";
 import ThemeContext from "../contexts/ThemeContext";
-import ThemeSwitch from "../components/ThemeSwitch";
-import DarkLogoSVG from "../assets/DarkLogoSVG";
-import LightLogoSVG from "../assets/LightLogoSVG";
+import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
+import LightLogoSVG from "../assets/svg/LightLogoSVG";
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
@@ -220,7 +219,6 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ThemeSwitch />
       {logoToUse}
       <Text style={styles.text}>Your future at your fingertips.</Text>
       <TabView

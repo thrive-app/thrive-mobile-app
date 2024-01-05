@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import EditIconSVG from "../assets/EditIconSVG";
+import EditIconSVG from "../assets/svg/EditIconSVG";
 
 
 export const ContentBox = ({ props, children }) => {
@@ -21,6 +21,8 @@ export const ContentBox = ({ props, children }) => {
     edit: {
       position: "relative",
       alignSelf: "flex-end",
+      width: 24,
+      height: 24
     },
   });
   return (

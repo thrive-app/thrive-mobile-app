@@ -6,7 +6,7 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
-  const [theme, setTheme] = useState(colorScheme || "light");
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     //load saved theme from async storage
@@ -23,16 +23,9 @@ export const ThemeProvider = ({ children }) => {
     getTheme();
   }, []);
 
-  useEffect(() => {
-    //set theme to system theme
-    if (colorScheme) {
-      setTheme(colorScheme);
-    }
-  }, [colorScheme]);
-
   const toggleTheme = (newTheme) => {
     setTheme(newTheme);
-    AsyncStorage.setItem("theme", newTheme);
+    AsyncStorage.setItem("theme", newTheme)
   };
 
   return (

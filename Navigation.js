@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { useColorScheme } from "react-native";
 import LoginPage from "./screens/LoginPage";
 import Welcome from "./screens/Welcome";
+import Settings from "./screens/Settings"
 import { ClerkLoaded, useUser } from "@clerk/clerk-expo";
 import LoginEmail from "./screens/LoginEmail";
 import ThemeContext from "./contexts/ThemeContext";
@@ -39,6 +40,10 @@ const RootNavigator = () => {
               name="Welcome"
               component={Welcome}
             />
+            <Stack.Screen
+                options={{headerShown: false}}
+                name="Settings"
+                component={Settings} />
           </>
         ) : (
           <>

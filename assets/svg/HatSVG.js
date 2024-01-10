@@ -4,6 +4,7 @@ const HatSVG = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     fill="#8c52ff"
+    viewBox="0 0 185 158"
     width={185}
     height={158}
     {...props}

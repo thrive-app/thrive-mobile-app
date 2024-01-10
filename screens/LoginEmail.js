@@ -15,7 +15,7 @@ import {
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import HatSVG from "../assets/HatSVG";
+import HatSVG from "../assets/svg/HatSVG";
 import {
   GestureHandlerRootView,
   TouchableWithoutFeedback,

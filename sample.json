@@ -1,0 +1,106 @@
+{
+  "id": "sample",
+  "firstName": "Akshay",
+  "lastName": "Pespunuri",
+  "email": "akshay.pespunuri@gmail.com",
+  "imageURL": "sample.url.com",
+  "grade": 11,
+  "school": "Normal Community High School",
+  "about": "Hi! My name is Akshay. Some of my favorite classes are math and chemistry. I enjoy programming and lifting weights in my free time. I'm open to network!",
+  "academics": {
+    "courses": [
+      ["Chemistry", "AP", -1],
+      ["Calculus BC", "AP", 5],
+      ["Calculus III", "H", -1],
+      ["Spanish IV", "R", -1]
+    ],
+    "testScores": [
+      ["ACT", 36],
+      ["SAT", 1550],
+      ["PSAT", 1490]
+    ]
+  },
+  "workExperience": [
+    {
+      "starred": true,
+      "jobTitle": "Web Development Intern",
+      "city": "Bloomington",
+      "state": "IL",
+      "employer": "Gen3 Learning",
+      "startDate": "05/2023",
+      "endDate": "08/2023",
+      "description": "Worked with a group of interns and the owner of a local tutoring business to create the business's website."
+    }
+  ],
+  "volunteerWork": [
+    {
+      "starred": false,
+      "jobTitle": "Volunteer",
+      "city": "multiple locations",
+      "state": "IL",
+      "employer": "BNSC",
+      "startDate": "02/2023",
+      "endDate": "Present",
+      "description": "Volunteered at various swim meets."
+    },
+    {
+      "starred": true,
+      "jobTitle": "Bell Ringer",
+      "city": "Bloomington",
+      "state": "IL",
+      "employer": "Salvation Army",
+      "startDate": "11/2021",
+      "endDate": "Present",
+      "description": "Rang bells outside of HyVee during the holiday season to raise money."
+    }
+  ],
+  "athletics": [
+    {
+      "starred": false,
+      "sport": "",
+      "position": "",
+      "startDate": "",
+      "endDate": "",
+      "description": ""
+    }
+  ],
+  "ecs": [
+    {
+      "starred": true,
+      "name": "Technology Student Association (TSA)",
+      "position": "Vice President",
+      "startDate": "06/2023",
+      "endDate": "Present",
+      "description": "Furthers STEM education in the community and leads engineering and CAD design activities."
+    },
+    {
+      "starred": false,
+      "name": "FBLA",
+      "position": "",
+      "startDate": "08/2021",
+      "endDate": "Present",
+      "description": "Gain fundamental business knowledge through competitive events and leadership conferences."
+    }
+  ],
+  "performingArts": [
+    {
+      "starred": true,
+      "name": "Violin",
+      "startDate": "08/2017",
+      "endDate": "05/2022",
+      "description": "2nd Chair"
+    }
+  ],
+  "awards": [
+    {
+      "starred": true,
+      "title": "5th Place Business Plan | FBLA National Leadership Conference",
+      "year": 2023
+    },
+    {
+      "starred": false,
+      "title": "1st Place CyberPatriot State Competition",
+      "year": 2024
+    }
+  ]
+}

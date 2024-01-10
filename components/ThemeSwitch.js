@@ -3,7 +3,7 @@ import { useTheme } from "@react-navigation/native";
 import { Switch } from "react-native";
 import ThemeContext from "../contexts/ThemeContext";
 
-const ThemeSwitch = () => {
+const ThemeSwitch = (props) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleToggleTheme = () => {
@@ -21,6 +21,7 @@ const ThemeSwitch = () => {
   const { colors } = useTheme();
   return (
     <Switch
+      {...props}
       trackColor={{ false: "#d3d3d3", true: "#a9a9a9" }}
       thumbColor={colors.primary}
       ios_backgroundColor={colors.background}

@@ -25,17 +25,17 @@ import GroupSVG from "../assets/svg/GroupSVG";
 import MedalSVG from "../assets/svg/MedalSVG";
 import TheaterSVG from "../assets/svg/TheaterSVG";
 import StarSVG from "../assets/svg/StarSVG";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Placeholder from "./Placeholder";
+import auth from "@react-native-firebase/auth"
+import firestore from '@react-native-firebase/firestore'
+import createNewUser from "../functions/createNewUser";
 
-const Tab = createBottomTabNavigator();
-
+const test = firestore().collection('users').doc("test").get()
 const Welcome = ({ route, navigation }) => {
   const sample = require("../sample.json");
-
+  console.log(test)
   const { colors } = useTheme();
   const { user } = useUser();
-
+  createNewUser(auth().currentUser.uid)
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -274,7 +274,7 @@ const Welcome = ({ route, navigation }) => {
   const starredPerformingArts =
     sample.performingArts[findStarred(sample.performingArts)];
   const starredAward = sample.awards[findStarred(sample.awards)];
-
+  
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -292,23 +292,20 @@ const Welcome = ({ route, navigation }) => {
             }}
           />
         </Header>
-        <Tab.Navigator>
-          <Tab.Screen name="Add" component={Placeholder} />
-        </Tab.Navigator>
         <GestureHandlerRootView>
           <ScrollView style={styles.scrollView}>
             <ContentBox>
               <View style={{ flex: 1, flexDirection: "row" }}>
                 <Image
                   source={{
-                    uri: user.imageUrl,
+                    uri: auth().currentUser.photoURL,
                   }}
                   width={100}
                   height={100}
                   style={styles.image}
                 />
                 <Text style={styles.titleText}>
-                  {user.firstName} {user.lastName}
+                  {auth().currentUser.displayName}
                 </Text>
               </View>
               <View
@@ -319,6 +316,7 @@ const Welcome = ({ route, navigation }) => {
                   margin: 5,
                 }}
               >
+                {console.log()}
                 <HatSVG width={20} height={16} />
                 <Text style={styles.grayBody}>
                   {gradeSwitch()} @ {sample.school}

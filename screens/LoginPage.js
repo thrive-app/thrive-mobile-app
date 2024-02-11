@@ -14,6 +14,7 @@ import { useOAuth } from "@clerk/clerk-expo";
 import ThemeContext from "../contexts/ThemeContext";
 import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
 import LightLogoSVG from "../assets/svg/LightLogoSVG";
+import onGoogleButtonPress from "../functions/onGoogleButtonPress";
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
@@ -141,7 +142,7 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onPressGoogle();
+          onGoogleButtonPress()
         }}
       >
         <SimpleLineIcons
@@ -188,7 +189,7 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onPressGoogle();
+          onGoogleButtonPress()
         }}
       >
         <SimpleLineIcons

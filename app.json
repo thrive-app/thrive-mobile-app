@@ -24,6 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "android/app/google-services.json",
       "package": "com.akshayp1.thrive"
     },
     "web": {
@@ -35,7 +36,10 @@
       }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
+      
     ]
   }
 }

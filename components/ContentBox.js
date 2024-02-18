@@ -2,9 +2,8 @@ import { View, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import EditIconSVG from "../assets/svg/EditIconSVG";
 
-
 export const ContentBox = ({ props, children }) => {
-  const { colors } = useTheme(); 
+  const { colors } = useTheme();
   const styles = StyleSheet.create({
     box: {
       width: "95%",
@@ -16,13 +15,13 @@ export const ContentBox = ({ props, children }) => {
       borderWidth: 1,
       paddingVertical: 30,
       marginTop: 15,
-      paddingHorizontal: 15
+      paddingHorizontal: 15,
     },
     edit: {
       position: "relative",
       alignSelf: "flex-end",
       width: 24,
-      height: 24
+      height: 24,
     },
   });
   return (

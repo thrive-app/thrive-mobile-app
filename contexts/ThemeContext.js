@@ -5,7 +5,6 @@ import { Alert, useColorScheme } from "react-native";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const colorScheme = useColorScheme();
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {

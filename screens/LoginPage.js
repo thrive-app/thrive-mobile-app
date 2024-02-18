@@ -10,14 +10,16 @@ import { useTheme } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { TabView, TabBar } from "react-native-tab-view";
-import { useOAuth } from "@clerk/clerk-expo";
 import ThemeContext from "../contexts/ThemeContext";
 import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
 import LightLogoSVG from "../assets/svg/LightLogoSVG";
 import onGoogleButtonPress from "../functions/onGoogleButtonPress";
+import { useDispatch } from "react-redux";
+import { getData } from "../redux/store";
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
+  const dispatch = useDispatch()
 
   const styles = StyleSheet.create({
     image: {
@@ -85,51 +87,15 @@ const LoginPage = ({ navigation }) => {
     { key: "signIn", title: "Sign In" },
   ]);
 
-  const googleOAuthFlow = useOAuth({ strategy: "oauth_google" }).startOAuthFlow;
-  const linkedInOAuthFlow = useOAuth({
-    strategy: "oauth_linkedin_oidc",
-  }).startOAuthFlow;
-
-  const onPressGoogle = useCallback(async () => {
-    try {
-      console.log(1);
-      const { createdSessionId, signIn, signUp, setActive } =
-        await googleOAuthFlow();
-      console.log(2);
-      if (createdSessionId) {
-        console.log(3); //login info wasn't in cache prior to starting OAuth flow
-        console.log(3.5);
-        setActive({ session: createdSessionId });
-        console.log(4);
-      } //add else and use signIn or signUp for MFA
-    } catch (err) {
-      Alert.alert("Authentication error", err);
-    }
-  }, []);
-
-  const onPressLinkedIn = useCallback(async () => {
-    try {
-      console.log(1);
-      const { createdSessionId, signIn, signUp, setActive } =
-        await linkedInOAuthFlow();
-      console.log(2);
-      if (createdSessionId) {
-        console.log(3); //login info wasn't in cache prior to starting OAuth flow
-        setActive({ session: createdSessionId });
-        console.log(3.5);
-        //useEffect(() => {signInWithClerk()}, []);
-        console.log(4);
-      } //add else and use signIn or signUp for MFA
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
 
   const [index, setIndex] = useState(0);
 
   const Register = () => (
     <>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RegistrationEmail")}
+      >
         <MaterialCommunityIcons
           name="email-outline"
           size={32}
@@ -142,7 +108,8 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onGoogleButtonPress()
+          onGoogleButtonPress();
+          dispatch(getData(true))
         }}
       >
         <SimpleLineIcons
@@ -156,9 +123,6 @@ const LoginPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          onPressLinkedIn();
-        }}
       >
         <SimpleLineIcons
           name="social-linkedin"
@@ -189,7 +153,7 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onGoogleButtonPress()
+          onGoogleButtonPress();
         }}
       >
         <SimpleLineIcons
@@ -203,9 +167,6 @@ const LoginPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          onPressLinkedIn();
-        }}
       >
         <SimpleLineIcons
           name="social-linkedin"

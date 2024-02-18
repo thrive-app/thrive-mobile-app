@@ -1,13 +1,13 @@
 import Navigation from "./Navigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ClerkProvider } from "@clerk/clerk-expo";
-import { tokenCache } from "./tokenCache";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { CLERK_PUBLISHABLE_KEY } from "@env";
 import BetterStatusBar from "./components/StatusBar";
-import * as SplashScreen from 'expo-splash-screen'
-import { useFonts } from 'expo-font'
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
 import { useCallback } from "react";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import dataReducer from "./redux/store";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -16,25 +16,29 @@ export default function App() {
     DMSansBold: require("./assets/fonts/DMSans-Bold.ttf"),
   });
   const onLayoutRootView = useCallback(async () => {
-    if(fontsLoaded) {
-      await SplashScreen.hideAsync()
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded])
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
   }
+
+  const store = configureStore({
+    reducer: {
+      store: dataReducer,
+    },
+  });
+  
   return (
-    <ThemeProvider>
-      <ClerkProvider
-        publishableKey={CLERK_PUBLISHABLE_KEY}
-        tokenCache={tokenCache}
-      >
+    <Provider store={store}>
+      <ThemeProvider>
         <SafeAreaProvider onLayout={onLayoutRootView}>
           <BetterStatusBar />
           <Navigation />
         </SafeAreaProvider>
-      </ClerkProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }

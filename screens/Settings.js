@@ -10,11 +10,12 @@ import { useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import ThemeSwitch from "../components/ThemeSwitch";
 import ThemeContext from "../contexts/ThemeContext";
-import { useAuth } from "@clerk/clerk-expo";
 import auth from "@react-native-firebase/auth"
+import { useDispatch } from "react-redux";
+import { getData } from "../redux/store";
 
 export const Settings = ({ navigation }) => {
-  const { isLoaded, signOut } = useAuth();
+  const dispatch = useDispatch()
   const { theme } = useContext(ThemeContext);
   const { colors } = useTheme();
   const styles = StyleSheet.create({
@@ -87,6 +88,7 @@ export const Settings = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
+            dispatch(getData(false))
             auth().signOut()
           }}
         >

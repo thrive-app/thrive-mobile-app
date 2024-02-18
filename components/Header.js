@@ -1,10 +1,7 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View } from "react-native";
 import LightLogoSVG from "../assets/svg/LightLogoSVG";
 import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
-import SettingsSVG from "../assets/svg/SettingsSVG";
 import { useTheme } from "@react-navigation/native";
-import { useContext } from "react";
-import ThemeContext from "../contexts/ThemeContext";
 import { DarkTheme } from "../themes";
 
 export const Header = ({ props, children }) => {

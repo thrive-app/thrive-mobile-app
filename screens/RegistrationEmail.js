@@ -22,11 +22,13 @@ import {
 import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
 import { getData } from "../redux/store";
+import createNewUser from "../functions/createNewUser";
 
-const LoginEmail = ({ navigation, route }) => {
+const RegistrationEmail = ({ navigation, route }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
   const { colors } = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+
   const styles = StyleSheet.create({
     text: {
       color: colors.text,
@@ -53,14 +55,14 @@ const LoginEmail = ({ navigation, route }) => {
       alignSelf: "center",
     },
     inputText: {
-      fontSize: 16,
+      fontSize: 13,
       color: "#000000",
       fontFamily: "DMSansRegular",
       backgroundColor: "#ececec",
       width: "100%",
-      padding: 20,
+      padding: 8,
       borderRadius: 16,
-      marginTop: 10,
+      marginTop: 8,
       marginBottom: 10,
     },
     image: {
@@ -69,41 +71,61 @@ const LoginEmail = ({ navigation, route }) => {
     },
   });
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = async () => {
-    await auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch((error) => {
-        console.log(error)
-        if (
-          error.code === "auth/invalid-email" ||
-          error.code === "auth/wrong-password" ||
-          error.code === "auth/invalid-credential"
-        ) {
-          Alert.alert(
-            "Authentication Error",
-            "The email or password are incorrect."
-          );
+  const goodPassword = (password) => {
+    var decimal =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/;
+    if (password.match(decimal)) {
+      return true;
+    }
+    return false;
+  };
+
+  const register = async () => {
+    if (firstName != "" && lastName != "" && email != "" && password != "") {
+      if (goodPassword(password)) {
+        await auth().createUserWithEmailAndPassword(email, password)
+        .catch(error => {
+          console.error(error)
+          if (error === "auth/email-already-in-use") {
+            Alert.alert(
+              "Authentication Error",
+              "That email address is already in use."
+            );
+          }
+          if (error.code === "auth/invalid-email") {
+            Alert.alert(
+              "Authentication Error",
+              "That email address is invalid."
+            );
+          }
+          if (error.code === "auth/weak-password") {
+            Alert.alert("Bad Password", "Password is too weak.");
+          }
+        })
+        console.log(auth().currentUser.uid)
+          try {
+            await auth().currentUser.updateProfile({
+              displayName: firstName + " " + lastName,
+              photoURL: "https://dummyimage.com/100x100/b8b8b8/fff.png&text=" + firstName[0] + lastName[0]
+            });
+            console.log(auth().currentUser.displayName + auth().currentUser.photoURL)
+            createNewUser(auth().currentUser.uid)
+            dispatch(getData(true)) //updates redux data store; logs in user on frontend
+        } catch(error) {
+          console.error(error)
         }
-        if (
-          error.code === "auth/user-not-found" ||
-          error.code === "auth/user-disabled"
-        ) {
-          Alert.alert(
-            "Authentication Error",
-            "A user with that email does not exist."
-          );
-        }
-        if(error.code === "auth/too-many-requests") {
-          Alert.alert(
-            "Too Many Requests",
-            "We have detected unusual authentication activity, so access to this account has been temporarily disabled. Please try again later."
-          );
-        }
-      });
-    dispatch(getData(true)); //log in user on frontend
+          
+      } else {
+        Alert.alert("Bad Password", "Password does not contain between 8 to 25 characters and at least one lowercase letter, one uppercase letter, one digit, and one special character.")
+      }
+    } else {
+      Alert.alert("Authentication Error", "One or more fields are empty.");
+    }
   };
 
   return (
@@ -132,7 +154,23 @@ const LoginEmail = ({ navigation, route }) => {
                 <TextInput
                   autoCorrect={false}
                   style={styles.inputText}
-                  placeholder="Email"
+                  placeholder="First Name"
+                  placeholderTextColor={"gray"}
+                  keyboardAppearance="default"
+                  onChangeText={(text) => setFirstName(text)}
+                />
+                <TextInput
+                  autoCorrect={false}
+                  style={styles.inputText}
+                  placeholder="Last Name"
+                  placeholderTextColor={"gray"}
+                  keyboardAppearance="default"
+                  onChangeText={(text) => setLastName(text)}
+                />
+                <TextInput
+                  autoCorrect={false}
+                  style={styles.inputText}
+                  placeholder="Email Address"
                   placeholderTextColor={"gray"}
                   keyboardAppearance="default"
                   onChangeText={(text) => setEmail(text)}
@@ -149,10 +187,11 @@ const LoginEmail = ({ navigation, route }) => {
                   onChangeText={(text) => setPassword(text)}
                 />
 
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText} onPress={() => login()}>
-                    Login
-                  </Text>
+                <TouchableOpacity
+                  onPress={() => register()}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -163,4 +202,4 @@ const LoginEmail = ({ navigation, route }) => {
   );
 };
 
-export default LoginEmail;
+export default RegistrationEmail;

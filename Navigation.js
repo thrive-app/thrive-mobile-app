@@ -1,19 +1,19 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useCallback, useContext, useState, useEffect } from "react";
-import { useColorScheme, View, Text } from "react-native";
+import { useContext, useState, useEffect } from "react";
+import { Text } from "react-native";
 import LoginPage from "./screens/LoginPage";
 import Welcome from "./screens/Welcome";
 import Settings from "./screens/Settings";
-import { ClerkLoaded, useUser } from "@clerk/clerk-expo";
 import LoginEmail from "./screens/LoginEmail";
 import ThemeContext from "./contexts/ThemeContext";
-import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme } from "./themes";
-import * as SplashScreen from "expo-splash-screen";
 import auth from "@react-native-firebase/auth";
+import RegistrationEmail from "./screens/RegistrationEmail";
+import { useSelector } from "react-redux"
 
 export default function Navigation() {
+  
   const { theme } = useContext(ThemeContext);
   return (
     <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
@@ -25,7 +25,7 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-  //const { isSignedIn } = useUser();
+  const loggedIn = useSelector((state) => state.store.value)
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -36,6 +36,8 @@ const RootNavigator = () => {
     if (initializing) setInitializing(false);
   }
 
+
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -44,9 +46,8 @@ const RootNavigator = () => {
   if (initializing) return <Text>Loading</Text>; //replace with loading screen
 
   return (
-    <ClerkLoaded>
       <Stack.Navigator>
-        {user ? (
+        {loggedIn && user ? (
           <>
             <Stack.Screen
               options={{ headerShown: false }}
@@ -71,9 +72,13 @@ const RootNavigator = () => {
               name="LoginEmail"
               component={LoginEmail}
             />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="RegistrationEmail"
+              component={RegistrationEmail}
+            />
           </>
         )}
       </Stack.Navigator>
-    </ClerkLoaded>
   );
 };

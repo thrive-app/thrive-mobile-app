@@ -2,13 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { createElement } from "react";
+import React from "react";
 import { useTheme } from "@react-navigation/native";
-import { useUser } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   GestureHandlerRootView,
@@ -27,15 +25,12 @@ import TheaterSVG from "../assets/svg/TheaterSVG";
 import StarSVG from "../assets/svg/StarSVG";
 import auth from "@react-native-firebase/auth"
 import firestore from '@react-native-firebase/firestore'
-import createNewUser from "../functions/createNewUser";
 
 const test = firestore().collection('users').doc("test").get()
 const Welcome = ({ route, navigation }) => {
   const sample = require("../sample.json");
-  console.log(test)
   const { colors } = useTheme();
-  const { user } = useUser();
-  createNewUser(auth().currentUser.uid)
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -298,7 +293,7 @@ const Welcome = ({ route, navigation }) => {
               <View style={{ flex: 1, flexDirection: "row" }}>
                 <Image
                   source={{
-                    uri: auth().currentUser.photoURL,
+                    uri: auth().currentUser.photoURL
                   }}
                   width={100}
                   height={100}
@@ -316,7 +311,6 @@ const Welcome = ({ route, navigation }) => {
                   margin: 5,
                 }}
               >
-                {console.log()}
                 <HatSVG width={20} height={16} />
                 <Text style={styles.grayBody}>
                   {gradeSwitch()} @ {sample.school}

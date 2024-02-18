@@ -51,6 +51,7 @@
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.21.1",
     "react-router-native": "^6.21.1",
+    "undici": "^5.28.3",
     "validator": "^13.11.0",
     "zod": "^3.22.4"
   },

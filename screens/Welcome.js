@@ -1,11 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -23,14 +17,25 @@ import GroupSVG from "../assets/svg/GroupSVG";
 import MedalSVG from "../assets/svg/MedalSVG";
 import TheaterSVG from "../assets/svg/TheaterSVG";
 import StarSVG from "../assets/svg/StarSVG";
-import auth from "@react-native-firebase/auth"
-import firestore from '@react-native-firebase/firestore'
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import { useSelector } from "react-redux";
+import EditBox from "../components/EditBox";
 
-const test = firestore().collection('users').doc("test").get()
 const Welcome = ({ route, navigation }) => {
+  const [visible, setVisible] = useState(false);
+  const openPopup = () => {
+    setVisible(true);
+  };
+
+  const closePopup = () => {
+    setVisible(false);
+  };
   const sample = require("../sample.json");
   const { colors } = useTheme();
-  
+
+  const userData = useSelector((sample) => sample.store.value.userData);
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -113,10 +118,25 @@ const Welcome = ({ route, navigation }) => {
       marginLeft: "50%",
       marginTop: "2%",
     },
+    popupButton: {
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#000",
+      width: 100,
+      height: 50,
+    },
+    popupContent: {
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#fff",
+      borderColor: "#000",
+      borderWidth: "1px",
+      height: 150,
+    },
   });
 
   function gradeSwitch() {
-    switch (sample.grade) {
+    switch (userData.grade) {
       case 9:
         return "Freshman";
       case 10:
@@ -125,6 +145,12 @@ const Welcome = ({ route, navigation }) => {
         return "Junior";
       case 12:
         return "Senior";
+      case -1:
+        return "";
+      case 0:
+        return "";
+      default:
+        return "Grade " + userData.grade;
     }
   }
 
@@ -140,136 +166,162 @@ const Welcome = ({ route, navigation }) => {
 
   const renderCourse = (info) => {
     let text;
-    if (info[1] === "H") {
-      text = "Honors " + info[0];
+    if (info.type === "H") {
+      text = "Honors " + info.name;
     }
-    if (info[1] === "R") {
-      text = info[0];
+    if (info.type === "R") {
+      text = info.name;
     }
-    if (info[1] === "AP" && info[2] === -1) {
-      text = "AP " + info[0];
+    if (info.type === "AP" && info.score === -1) {
+      text = "AP " + info.name;
     }
-    if (info[1] === "AP" && info[2] != -1) {
-      text = "AP " + info[0] + " | AP Test Score: " + info[2];
+    if (info.type === "AP" && info.score != -1) {
+      text = "AP " + info.name + " | AP Test Score: " + info.score;
     }
     return <Text style={styles.bodyText}>{text}</Text>;
   };
-  const courses = sample.academics.courses.map((course) =>
-    renderCourse(course)
-  );
-  const testScores = sample.academics.testScores.map((score) => (
-    <Text style={styles.bodyText}>
-      <Text style={{ fontFamily: "DMSansMedium" }}>{score[0]}: </Text>
-      {score[1]}
-    </Text>
-  ));
+  const courses = userData.academics.courses
+    ? userData.academics.courses.map((course) => renderCourse(course))
+    : null;
 
-  const renderWork = sample.workExperience.map((work) => (
-    <>
-      <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-        {work.starred ? <StarSVG /> : null}
-        <Text style={styles.subheadingText}>{work.jobTitle}</Text>
-      </View>
-      <Text style={styles.description}>
-        <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
-          {work.employer} ||{" "}
+  const testScores = userData.academics.testScores
+    ? userData.academics.testScores.map((score) => (
+        <Text style={styles.bodyText}>
+          <Text style={{ fontFamily: "DMSansMedium" }}>{score.name}: </Text>
+          {score.score}
         </Text>
-        <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
-          {work.city}, {work.state} || {}
-        </Text>
-        {work.startDate}-{work.endDate}
-      </Text>
-      <Text style={styles.bodyText}>{work.description}</Text>
-    </>
-  ));
+      ))
+    : null;
 
-  const renderVolunteer = sample.volunteerWork.map((work) => (
-    <>
-      <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-        {work.starred ? <StarSVG /> : null}
-        <Text style={styles.subheadingText}>{work.jobTitle}</Text>
-      </View>
-      <Text style={styles.description}>
-        <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
-          {work.employer} ||{" "}
-        </Text>
-        <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
-          {work.city}, {work.state} || {}
-        </Text>
-        {work.startDate}-{work.endDate}
-      </Text>
-      <Text style={styles.bodyText}>{work.description}</Text>
-      <View style={{ height: 20 }} />
-    </>
-  ));
-
-  const renderAthletics = sample.athletics.map((work) => (
-    <>
-      <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-        {work.starred ? <StarSVG /> : null}
-        <Text style={styles.subheadingText}>{work.jobTitle}</Text>
-      </View>
-      <Text style={styles.description}>
-        <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
-          {work.employer}{" "}
-        </Text>
-        <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
-          {work.city}, {work.state} {}
-        </Text>
-        {work.startDate}-{work.endDate}
-      </Text>
-      <Text style={styles.bodyText}>{work.description}</Text>
-      <View style={{ height: 20 }} />
-    </>
-  ));
-
-  const renderECs = sample.ecs.map((work) => (
-    <>
-      <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-        {work.starred ? <StarSVG /> : null}
-        <Text style={styles.subheadingText}>{work.name}</Text>
-      </View>
-      <Text style={styles.description}>
-        <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
-          {work.position} || {""}
-        </Text>
-        {work.startDate}-{work.endDate}
-      </Text>
-      <Text style={styles.bodyText}>{work.description}</Text>
-      <View style={{ height: 20 }} />
-    </>
-  ));
-
-  const renderAwards = sample.awards.map((award) => (
-    <>
-      <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-        {award.starred ? <StarSVG /> : null}
-        <Text
-          style={{
-            fontFamily: "DMSansBold",
-            fontStyle: "italic",
-            flexWrap: "nowrap",
-            color: colors.text,
-            flex: 0,
-          }}
-        >
-          {award.title}{" "}
-          <Text style={{ fontFamily: "DMSansRegular", fontStyle: "italic" }}>
-            {award.year}
+  const renderWork = userData.workExperience
+    ? map((work) => (
+        <>
+          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+            {work.starred ? <StarSVG /> : null}
+            <Text style={styles.subheadingText}>{work.jobTitle}</Text>
+          </View>
+          <Text style={styles.description}>
+            <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
+              {work.employer} ||{" "}
+            </Text>
+            <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
+              {work.city}, {work.state} || {}
+            </Text>
+            {work.startDate}-{work.endDate}
           </Text>
-        </Text>
-      </View>
-    </>
-  ));
+          <Text style={styles.bodyText}>{work.description}</Text>
+        </>
+      ))
+    : null;
 
-  const starredWork = sample.workExperience[findStarred(sample.workExperience)];
-  const starredVolunteer =
-    sample.volunteerWork[findStarred(sample.volunteerWork)];
-  const starredEC = sample.ecs[findStarred(sample.ecs)];
-  const starredPerformingArts =
-    sample.performingArts[findStarred(sample.performingArts)];
-  const starredAward = sample.awards[findStarred(sample.awards)];
-  
+  const renderVolunteer = userData.volunteerWork
+    ? userData.volunteerWork.map((work) => (
+        <>
+          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+            {work.starred ? <StarSVG /> : null}
+            <Text style={styles.subheadingText}>{work.jobTitle}</Text>
+          </View>
+          <Text style={styles.description}>
+            <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
+              {work.employer} ||{" "}
+            </Text>
+            <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
+              {work.city}, {work.state} || {}
+            </Text>
+            {work.startDate}-{work.endDate}
+          </Text>
+          <Text style={styles.bodyText}>{work.description}</Text>
+          <View style={{ height: 20 }} />
+        </>
+      ))
+    : null;
+
+  const renderAthletics = userData.athletics
+    ? sample.athletics.map((work) => (
+        <>
+          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+            {work.starred ? <StarSVG /> : null}
+            <Text style={styles.subheadingText}>{work.jobTitle}</Text>
+          </View>
+          <Text style={styles.description}>
+            <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
+              {work.employer}{" "}
+            </Text>
+            <Text style={{ fontFamily: "DMSansMedium", fontStyle: "italic" }}>
+              {work.city}, {work.state} {}
+            </Text>
+            {work.startDate}-{work.endDate}
+          </Text>
+          <Text style={styles.bodyText}>{work.description}</Text>
+          <View style={{ height: 20 }} />
+        </>
+      ))
+    : null;
+
+  const renderECs = userData.ecs
+    ? userData.ecs.map((work) => (
+        <>
+          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+            {work.starred ? <StarSVG /> : null}
+            <Text style={styles.subheadingText}>{work.name}</Text>
+          </View>
+          <Text style={styles.description}>
+            <Text style={{ fontFamily: "DMSansBold", fontStyle: "italic" }}>
+              {work.position} || {""}
+            </Text>
+            {work.startDate}-{work.endDate}
+          </Text>
+          <Text style={styles.bodyText}>{work.description}</Text>
+          <View style={{ height: 20 }} />
+        </>
+      ))
+    : null;
+
+  const renderAwards = userData.awards
+    ? userData.awards.map((award) => (
+        <>
+          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+            {award.starred ? <StarSVG /> : null}
+            <Text
+              style={{
+                fontFamily: "DMSansBold",
+                fontStyle: "italic",
+                flexWrap: "nowrap",
+                color: colors.text,
+                flex: 0,
+              }}
+            >
+              {award.title}{" "}
+              <Text
+                style={{ fontFamily: "DMSansRegular", fontStyle: "italic" }}
+              >
+                {award.year}
+              </Text>
+            </Text>
+          </View>
+        </>
+      ))
+    : null;
+
+  const starredWork = userData.workExperience
+    ? userData.workExperience[findStarred(userData.workExperience)]
+    : null;
+  const starredVolunteer = userData.volunteerWork
+    ? userData.volunteerWork[findStarred(userData.volunteerWork)]
+    : null;
+  const starredEC = userData.ecs
+    ? userData.ecs[findStarred(userData.ecs)]
+    : null;
+  const starredAthletics = userData.athletics
+    ? userData.athletics[findStarred(userData.athletics)]
+    : null;
+  const starredPerformingArts = userData.performingArts
+    ? userData.performingArts[findStarred(userData.performingArts)]
+    : null;
+  const starredAward = userData.awards
+    ? userData.awards[findStarred(userData.awards)]
+    : null;
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -289,64 +341,93 @@ const Welcome = ({ route, navigation }) => {
         </Header>
         <GestureHandlerRootView>
           <ScrollView style={styles.scrollView}>
-            <ContentBox>
+            <EditBox
+              visible={visible}
+              transparent={true}
+              dismiss={closePopup}
+              margin={"25%"}
+            >
+              <View style={styles.popupContent}>
+                <Text style={{ fontSize: 18 }}>Popup opened!</Text>
+              </View>
+            </EditBox>
+            <ContentBox onPress={() => console.log("pressed")}>
               <View style={{ flex: 1, flexDirection: "row" }}>
                 <Image
                   source={{
-                    uri: auth().currentUser.photoURL
+                    uri: auth().currentUser.photoURL,
                   }}
                   width={100}
                   height={100}
                   style={styles.image}
                 />
                 <Text style={styles.titleText}>
-                  {auth().currentUser.displayName}
+                  {userData.firstName + " " + userData.lastName}
                 </Text>
               </View>
+              {userData.grade && userData.school ? (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    marginTop: 10,
+                    margin: 5,
+                  }}
+                >
+                  <HatSVG width={20} height={16} />
+
+                  <Text style={styles.grayBody}>
+                    {gradeSwitch()} @ {userData.school}
+                  </Text>
+                </View>
+              ) : null}
+              {starredWork ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <BuildingSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>
+                    {starredWork.jobTitle} @ {starredWork.employer}
+                  </Text>
+                </View>
+              ) : null}
+              {starredVolunteer ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <VolunteerSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>
+                    {starredVolunteer.jobTitle} @ {starredVolunteer.employer}
+                  </Text>
+                </View>
+              ) : null}
+              {starredEC ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <GroupSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>
+                    {starredEC.name} {starredEC.position}
+                  </Text>
+                </View>
+              ) : null}
+              {starredPerformingArts ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <TheaterSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>
+                    {starredPerformingArts.name}
+                  </Text>
+                </View>
+              ) : null}
+              {starredAthletics ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <TheaterSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>{starredAthletics.name}</Text>
+                </View>
+              ) : null}
+              {starredAward ? (
+                <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+                  <MedalSVG width={20} height={16} />
+                  <Text style={styles.grayBody}>{starredAward.title}</Text>
+                </View>
+              ) : null}
               <View
                 style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  marginTop: 10,
-                  margin: 5,
-                }}
-              >
-                <HatSVG width={20} height={16} />
-                <Text style={styles.grayBody}>
-                  {gradeSwitch()} @ {sample.school}
-                </Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-                <BuildingSVG width={20} height={16} />
-                <Text style={styles.grayBody}>
-                  {starredWork.jobTitle} @ {starredWork.employer}
-                </Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-                <VolunteerSVG width={20} height={16} />
-                <Text style={styles.grayBody}>
-                  {starredVolunteer.jobTitle} @ {starredVolunteer.employer}
-                </Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-                <GroupSVG width={20} height={16} />
-                <Text style={styles.grayBody}>
-                  {starredEC.name} {starredEC.position}
-                </Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-                <TheaterSVG width={20} height={16} />
-                <Text style={styles.grayBody}>
-                  {starredPerformingArts.name}
-                </Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-                <MedalSVG width={20} height={16} />
-                <Text style={styles.grayBody}>{starredAward.title}</Text>
-              </View>
-              <View
-                style={{
-                  marginVertical: 10,
+                  marginVertical: 25,
                   borderBottomColor: "#d9d7d7",
                   borderBottomWidth: 1,
                   width: "50%",
@@ -354,7 +435,9 @@ const Welcome = ({ route, navigation }) => {
                 }}
               />
               <Text style={styles.title2Text}>About</Text>
-              <Text style={styles.bodyText}>{sample.about}</Text>
+              <Text style={styles.bodyText}>
+                {userData.about ? userData.about : null}
+              </Text>
             </ContentBox>
             <ContentBox>
               <Text style={styles.titleText}>Academics</Text>

@@ -21,7 +21,8 @@ import {
 } from "react-native-gesture-handler";
 import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
-import { getData } from "../redux/store";
+import { updateLoggedIn, updateUser } from "../redux/state";
+import firestore from "@react-native-firebase/firestore";
 
 const LoginEmail = ({ navigation, route }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
@@ -76,7 +77,7 @@ const LoginEmail = ({ navigation, route }) => {
     await auth()
       .signInWithEmailAndPassword(email, password)
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         if (
           error.code === "auth/invalid-email" ||
           error.code === "auth/wrong-password" ||
@@ -96,14 +97,21 @@ const LoginEmail = ({ navigation, route }) => {
             "A user with that email does not exist."
           );
         }
-        if(error.code === "auth/too-many-requests") {
+        if (error.code === "auth/too-many-requests") {
           Alert.alert(
             "Too Many Requests",
             "We have detected unusual authentication activity, so access to this account has been temporarily disabled. Please try again later."
           );
         }
       });
-    dispatch(getData(true)); //log in user on frontend
+    firestore()
+      .collection("users")
+      .doc(auth().currentUser.uid)
+      .get()
+      .then((doc) => {
+        dispatch(updateUser(doc.data()));
+      });
+    dispatch(updateLoggedIn(true)); //log in user on frontend
   };
 
   return (

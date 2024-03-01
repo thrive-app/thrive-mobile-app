@@ -21,13 +21,13 @@ import {
 } from "react-native-gesture-handler";
 import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
-import { getData } from "../redux/store";
+import { updateLoggedIn } from "../redux/state";
 import createNewUser from "../functions/createNewUser";
 
 const RegistrationEmail = ({ navigation, route }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
   const { colors } = useTheme();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
     text: {
@@ -88,40 +88,48 @@ const RegistrationEmail = ({ navigation, route }) => {
   const register = async () => {
     if (firstName != "" && lastName != "" && email != "" && password != "") {
       if (goodPassword(password)) {
-        await auth().createUserWithEmailAndPassword(email, password)
-        .catch(error => {
-          console.error(error)
-          if (error === "auth/email-already-in-use") {
-            Alert.alert(
-              "Authentication Error",
-              "That email address is already in use."
-            );
-          }
-          if (error.code === "auth/invalid-email") {
-            Alert.alert(
-              "Authentication Error",
-              "That email address is invalid."
-            );
-          }
-          if (error.code === "auth/weak-password") {
-            Alert.alert("Bad Password", "Password is too weak.");
-          }
-        })
-        console.log(auth().currentUser.uid)
-          try {
-            await auth().currentUser.updateProfile({
-              displayName: firstName + " " + lastName,
-              photoURL: "https://dummyimage.com/100x100/b8b8b8/fff.png&text=" + firstName[0] + lastName[0]
-            });
-            console.log(auth().currentUser.displayName + auth().currentUser.photoURL)
-            createNewUser(auth().currentUser.uid)
-            dispatch(getData(true)) //updates redux data store; logs in user on frontend
-        } catch(error) {
-          console.error(error)
+        await auth()
+          .createUserWithEmailAndPassword(email, password)
+          .catch((error) => {
+            console.error(error);
+            if (error === "auth/email-already-in-use") {
+              Alert.alert(
+                "Authentication Error",
+                "That email address is already in use."
+              );
+            }
+            if (error.code === "auth/invalid-email") {
+              Alert.alert(
+                "Authentication Error",
+                "That email address is invalid."
+              );
+            }
+            if (error.code === "auth/weak-password") {
+              Alert.alert("Bad Password", "Password is too weak.");
+            }
+          });
+        console.log(auth().currentUser.uid);
+        try {
+          await auth().currentUser.updateProfile({
+            displayName: firstName + " " + lastName,
+            photoURL:
+              "https://dummyimage.com/100x100/b8b8b8/fff.png&text=" +
+              firstName[0] +
+              lastName[0],
+          });
+          console.log(
+            auth().currentUser.displayName + auth().currentUser.photoURL
+          );
+          createNewUser(auth().currentUser.uid);
+          dispatch(updateLoggedIn(true)); //updates redux data store; logs in user on frontend
+        } catch (error) {
+          console.error(error);
         }
-          
       } else {
-        Alert.alert("Bad Password", "Password does not contain between 8 to 25 characters and at least one lowercase letter, one uppercase letter, one digit, and one special character.")
+        Alert.alert(
+          "Bad Password",
+          "Password does not contain between 8 to 25 characters and at least one lowercase letter, one uppercase letter, one digit, and one special character."
+        );
       }
     } else {
       Alert.alert("Authentication Error", "One or more fields are empty.");

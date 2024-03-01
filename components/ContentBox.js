@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import EditIconSVG from "../assets/svg/EditIconSVG";
 
-export const ContentBox = ({ props, children }) => {
+export const ContentBox = (props) => {
   const { colors } = useTheme();
   const styles = StyleSheet.create({
     box: {
@@ -25,11 +25,11 @@ export const ContentBox = ({ props, children }) => {
     },
   });
   return (
-    <View {...props} style={styles.box}>
+    <View style={styles.box}>
       <View style={styles.edit}>
-        <EditIconSVG />
+        <EditIconSVG onPress={props.onPress}/>
       </View>
-      {children}
+      {props.children}
     </View>
   );
 };

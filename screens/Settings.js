@@ -10,21 +10,22 @@ import { useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import ThemeSwitch from "../components/ThemeSwitch";
 import ThemeContext from "../contexts/ThemeContext";
-import auth from "@react-native-firebase/auth"
-import { useDispatch } from "react-redux";
-import { getData } from "../redux/store";
+import auth from "@react-native-firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { updateLoggedIn, updateUser } from "../redux/state";
 
 export const Settings = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
   const { colors } = useTheme();
+  const niharika = useSelector((state) => state.store.value.userData)
   const styles = StyleSheet.create({
     text: {
       color: colors.text,
       fontSize: 24,
       fontFamily: "DMSansBold",
       paddingLeft: "18%",
-      paddingRight:"5%",
+      paddingRight: "5%",
       textAlign: "center",
       alignSelf: "center",
     },
@@ -88,8 +89,10 @@ export const Settings = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(getData(false))
-            auth().signOut()
+            dispatch(updateUser({}))
+            dispatch(updateLoggedIn(false));
+            console.log(niharika)
+            auth().signOut();
           }}
         >
           <Text style={styles.buttonText}>Log Out</Text>

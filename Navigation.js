@@ -25,7 +25,7 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-  const loggedIn = useSelector((state) => state.store.value)
+  const loggedIn = useSelector((state) => state.store.value.loggedIn)
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();

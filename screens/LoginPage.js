@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
@@ -15,11 +15,18 @@ import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
 import LightLogoSVG from "../assets/svg/LightLogoSVG";
 import onGoogleButtonPress from "../functions/onGoogleButtonPress";
 import { useDispatch } from "react-redux";
-import { getData } from "../redux/store";
+import { updateLoggedIn, updateUser } from "../redux/state";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   const styles = StyleSheet.create({
     image: {
@@ -87,7 +94,6 @@ const LoginPage = ({ navigation }) => {
     { key: "signIn", title: "Sign In" },
   ]);
 
-
   const [index, setIndex] = useState(0);
 
   const Register = () => (
@@ -108,8 +114,17 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onGoogleButtonPress();
-          dispatch(getData(true))
+          onGoogleButtonPress().then(
+            firestore()
+              .collection("users")
+              .doc(auth().currentUser.uid)
+              .get()
+              .then((doc) => {
+                dispatch(updateUser(doc.data()));
+                setLoading(false);
+                dispatch(updateLoggedIn(true));
+              })
+          );
         }}
       >
         <SimpleLineIcons
@@ -121,9 +136,7 @@ const LoginPage = ({ navigation }) => {
         <Text style={styles.buttonText}>Register with Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-      >
+      <TouchableOpacity style={styles.button}>
         <SimpleLineIcons
           name="social-linkedin"
           size={28}
@@ -154,6 +167,7 @@ const LoginPage = ({ navigation }) => {
         style={styles.button}
         onPress={() => {
           onGoogleButtonPress();
+          dispatch(updateLoggedIn(true));
         }}
       >
         <SimpleLineIcons
@@ -165,9 +179,7 @@ const LoginPage = ({ navigation }) => {
         <Text style={styles.buttonText}>Sign in with Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-      >
+      <TouchableOpacity style={styles.button}>
         <SimpleLineIcons
           name="social-linkedin"
           size={28}

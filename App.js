@@ -7,7 +7,7 @@ import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import dataReducer from "./redux/store";
+import dataReducer from "./redux/state";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,10 +27,10 @@ export default function App() {
 
   const store = configureStore({
     reducer: {
-      store: dataReducer,
+      store: dataReducer
     },
   });
-  
+
   return (
     <Provider store={store}>
       <ThemeProvider>

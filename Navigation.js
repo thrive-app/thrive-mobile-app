@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext, useState, useEffect } from "react";
-import { Text } from "react-native";
+import { Text, ActivityIndicator, View, StyleSheet } from "react-native";
 import LoginPage from "./screens/LoginPage";
 import Welcome from "./screens/Welcome";
 import Settings from "./screens/Settings";
@@ -13,6 +13,8 @@ import RegistrationEmail from "./screens/RegistrationEmail";
 import { useSelector } from "react-redux"
 
 export default function Navigation() {
+
+  
   
   const { theme } = useContext(ThemeContext);
   return (
@@ -37,13 +39,26 @@ const RootNavigator = () => {
   }
 
 
-
+  const styles = StyleSheet.create({
+    indicatorText: {
+      fontSize: 18,
+      marginTop: 12,
+      fontWeight: 'bold',
+      fontFamily: 'sans-serif-medium'
+    }
+  })
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (initializing) return <Text>Loading</Text>; //replace with loading screen
+  if (initializing) return(
+    <View style={{alignContent: 'center', justifyContent:'center'}}>
+      <ActivityIndicator size="large" color="rgb(140,82,255)" />
+      <Text style={styles.indicatorText}>Loading...</Text>
+    </View>
+  )
+  //replace with loading screen
 
   return (
       <Stack.Navigator>

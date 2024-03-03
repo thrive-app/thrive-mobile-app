@@ -6,19 +6,15 @@ import {
   Text,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import ThemeSwitch from "../components/ThemeSwitch";
-import ThemeContext from "../contexts/ThemeContext";
 import auth from "@react-native-firebase/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateLoggedIn, updateUser } from "../redux/state";
 
 export const Settings = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { theme } = useContext(ThemeContext);
   const { colors } = useTheme();
-  const niharika = useSelector((state) => state.store.value.userData)
   const styles = StyleSheet.create({
     text: {
       color: colors.text,
@@ -90,9 +86,9 @@ export const Settings = ({ navigation }) => {
           style={styles.button}
           onPress={() => {
             dispatch(updateUser({}))
-            dispatch(updateLoggedIn(false));
-            console.log(niharika)
-            auth().signOut();
+            auth().signOut()
+            dispatch(updateLoggedIn(false))
+            
           }}
         >
           <Text style={styles.buttonText}>Log Out</Text>

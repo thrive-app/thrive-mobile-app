@@ -1,47 +1,38 @@
-import { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Modal,
-  TouchableWithoutFeedback,
-} from "react-native";
+import Modal from "react-native-modal";
+import { StyleSheet, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
-export default function EditBox({
-  children,
-  visible,
-  transparent,
-  dismiss,
-  margin,
-}) {
+const EditBox = (props) => {
+  const { colors } = useTheme();
+
+  const styles = StyleSheet.create({
+    box: {
+      width: "95%",
+      height: "85%",
+      flex: 0,
+      alignSelf: "center",
+      flexDirection: "column",
+      borderRadius: 30,
+      borderColor: colors.primary,
+      borderWidth: 2,
+      paddingVertical: 30,
+      marginTop: 15,
+      paddingHorizontal: 15,
+      backgroundColor: colors.background,
+    },
+    edit: {
+      position: "relative",
+      alignSelf: "flex-end",
+      width: 24,
+      height: 24,
+    },
+  });
+  const { type, children, ...other } = props;
   return (
-    <Modal visible={visible} transparent={transparent} onRequestClose={dismiss}>
-      <TouchableWithoutFeedback onPress={dismiss}>
-        <View style={styles.modalOverlay} />
-      </TouchableWithoutFeedback>
-
-      <View
-        style={{
-          ...styles.modalContent,
-          margin: margin,
-        }}
-      >
-        {children}
-      </View>
+    <Modal {...other}>
+      <View style={styles.box}>{children}</View>
     </Modal>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  modalContent: {
-    justifyContent: "center",
-    marginVertical: "100%",
-  },
-  modalOverlay: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-});
+export default EditBox;

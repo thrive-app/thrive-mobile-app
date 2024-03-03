@@ -73,11 +73,10 @@ const LoginEmail = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = async () => {
-    await auth()
+  const login = () => {
+    auth()
       .signInWithEmailAndPassword(email, password)
       .catch((error) => {
-        console.log(error);
         if (
           error.code === "auth/invalid-email" ||
           error.code === "auth/wrong-password" ||
@@ -103,15 +102,17 @@ const LoginEmail = ({ navigation, route }) => {
             "We have detected unusual authentication activity, so access to this account has been temporarily disabled. Please try again later."
           );
         }
-      });
-    firestore()
-      .collection("users")
-      .doc(auth().currentUser.uid)
-      .get()
-      .then((doc) => {
-        dispatch(updateUser(doc.data()));
-      });
-    dispatch(updateLoggedIn(true)); //log in user on frontend
+      })
+      .then(() => {
+        firestore()
+          .collection("users")
+          .doc(auth().currentUser.uid)
+          .get()
+          .then((doc) => {
+            dispatch(updateUser(doc.data()));
+          });
+        dispatch(updateLoggedIn(true)); //log in user on frontend
+      }).catch(error => console.error(error))
   };
 
   return (
@@ -157,8 +158,8 @@ const LoginEmail = ({ navigation, route }) => {
                   onChangeText={(text) => setPassword(text)}
                 />
 
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText} onPress={() => login()}>
+                <TouchableOpacity style={styles.button} onPress={() => login()}>
+                  <Text style={styles.buttonText} >
                     Login
                   </Text>
                 </TouchableOpacity>

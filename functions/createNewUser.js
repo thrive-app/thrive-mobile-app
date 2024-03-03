@@ -1,13 +1,10 @@
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
-import { useDispatch } from "react-redux";
 
-
-function createNewUser (userId) {
+function createNewUser(userId) {
   const userRef = firestore().collection("users").doc(userId);
   const user = auth().currentUser;
   const date = new Date();
-  
 
   userRef.get().then((docSnapshot) => {
     if (!docSnapshot.exists) {
@@ -25,11 +22,11 @@ function createNewUser (userId) {
         profileImage: user.photoURL,
         school: "",
         about: "",
-        grade: -1
+        grade: 0,
       };
       userRef.set(userData);
     }
   });
-};
+}
 
 export default createNewUser;

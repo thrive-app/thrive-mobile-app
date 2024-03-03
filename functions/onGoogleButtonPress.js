@@ -1,7 +1,5 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { GOOGLE_WEB_CLIENT_ID } from "@env";
-import { useDispatch } from "react-redux";
-import { getData } from "../redux/state";
 import auth from "@react-native-firebase/auth";
 import createNewUser from "./createNewUser";
 
@@ -10,7 +8,6 @@ GoogleSignin.configure({
 });
 
 const onGoogleButtonPress = async () => {
-  //const dispatch = useDispatch();
   //check if device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
@@ -23,7 +20,5 @@ const onGoogleButtonPress = async () => {
   await auth().signInWithCredential(googleCredential);
 
   createNewUser(auth().currentUser.uid);
-
-  //dispatch(getData(true))
 };
 export default onGoogleButtonPress;

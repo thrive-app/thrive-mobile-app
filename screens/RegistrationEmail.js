@@ -21,7 +21,7 @@ import {
 } from "react-native-gesture-handler";
 import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
-import { updateLoggedIn } from "../redux/state";
+import { updateLoggedIn, updateUser } from "../redux/state";
 import createNewUser from "../functions/createNewUser";
 
 const RegistrationEmail = ({ navigation, route }) => {
@@ -108,7 +108,7 @@ const RegistrationEmail = ({ navigation, route }) => {
               Alert.alert("Bad Password", "Password is too weak.");
             }
           });
-        console.log(auth().currentUser.uid);
+
         try {
           await auth().currentUser.updateProfile({
             displayName: firstName + " " + lastName,
@@ -117,11 +117,16 @@ const RegistrationEmail = ({ navigation, route }) => {
               firstName[0] +
               lastName[0],
           });
-          console.log(
-            auth().currentUser.displayName + auth().currentUser.photoURL
-          );
+
           createNewUser(auth().currentUser.uid);
-          dispatch(updateLoggedIn(true)); //updates redux data store; logs in user on frontend
+          firestore()
+            .collection("users")
+            .doc(auth().currentUser.uid)
+            .get()
+            .then((doc) => {
+              dispatch(updateUser(doc.data()));
+              dispatch(updateLoggedIn(true)); //updates redux data store; logs in user on frontend
+            });
         } catch (error) {
           console.error(error);
         }

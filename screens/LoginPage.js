@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useTheme } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons"
+import { MaterialIcons } from '@expo/vector-icons';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { TabView, TabBar } from "react-native-tab-view";
 import ThemeContext from "../contexts/ThemeContext";
 import DarkLogoSVG from "../assets/svg/DarkLogoSVG";
@@ -18,15 +19,29 @@ import { useDispatch } from "react-redux";
 import { updateLoggedIn, updateUser } from "../redux/state";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
+import createNewUser from "../functions/createNewUser";
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 const LoginPage = ({ navigation }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  
+
+  const onGoogleLogin = () => {
+    onGoogleButtonPress().then(() => {
+      createNewUser(auth().currentUser.uid)
+      firestore()
+        .collection("users")
+        .doc(auth().currentUser.uid)
+        .get()
+        .then((doc) => {
+          dispatch(updateUser(doc.data()));
+          dispatch(updateLoggedIn(true));
+        });
+    }).catch((error) => {
+      Alert.alert("Authentication Error:", error)
+    })
+  }
 
   const styles = StyleSheet.create({
     image: {
@@ -102,8 +117,8 @@ const LoginPage = ({ navigation }) => {
         style={styles.button}
         onPress={() => navigation.navigate("RegistrationEmail")}
       >
-        <MaterialCommunityIcons
-          name="email-outline"
+        <MaterialIcons
+          name="email"
           size={32}
           color="white"
           style={styles.icons}
@@ -113,22 +128,10 @@ const LoginPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          onGoogleButtonPress().then(
-            firestore()
-              .collection("users")
-              .doc(auth().currentUser.uid)
-              .get()
-              .then((doc) => {
-                dispatch(updateUser(doc.data()));
-                setLoading(false);
-                dispatch(updateLoggedIn(true));
-              })
-          );
-        }}
+        onPress={onGoogleLogin}
       >
-        <SimpleLineIcons
-          name="social-google"
+       <AntDesign
+          name="google"
           size={28}
           color="white"
           style={styles.icons}
@@ -137,13 +140,13 @@ const LoginPage = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
-        <SimpleLineIcons
-          name="social-linkedin"
-          size={28}
+      <MaterialCommunityIcons
+          name="apple"
+          size={30}
           color="white"
           style={styles.icons}
         />
-        <Text style={styles.buttonText}>Register with LinkedIn</Text>
+        <Text style={styles.buttonText}>Register with Apple</Text>
       </TouchableOpacity>
     </>
   );
@@ -154,8 +157,8 @@ const LoginPage = ({ navigation }) => {
         style={styles.button}
         onPress={() => navigation.navigate("LoginEmail")}
       >
-        <MaterialCommunityIcons
-          name="email-outline"
+        <MaterialIcons
+          name="email"
           size={32}
           color="white"
           style={styles.icons}
@@ -165,13 +168,10 @@ const LoginPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          onGoogleButtonPress();
-          dispatch(updateLoggedIn(true));
-        }}
+        onPress={onGoogleLogin}
       >
-        <SimpleLineIcons
-          name="social-google"
+        <AntDesign
+          name="google"
           size={28}
           color="white"
           style={styles.icons}
@@ -180,13 +180,13 @@ const LoginPage = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
-        <SimpleLineIcons
-          name="social-linkedin"
-          size={28}
+        <MaterialCommunityIcons
+          name="apple"
+          size={30}
           color="white"
           style={styles.icons}
         />
-        <Text style={styles.buttonText}>Sign in with LinkedIn</Text>
+        <Text style={styles.buttonText}>Sign in with Apple</Text>
       </TouchableOpacity>
     </>
   );

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,24 +17,44 @@ import GroupSVG from "../assets/svg/GroupSVG";
 import MedalSVG from "../assets/svg/MedalSVG";
 import TheaterSVG from "../assets/svg/TheaterSVG";
 import StarSVG from "../assets/svg/StarSVG";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import EditBox from "../components/EditBox";
+import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
+import { updateUser } from "../redux/state";
+
 
 const Welcome = ({ route, navigation }) => {
+  const userData = useSelector((sample) => sample.store.value.userData);
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const openPopup = () => {
-    setVisible(true);
+  const [grade, setGrade] = useState(userData.grade);
+  const [about, setAbout] = useState(userData.about);
+  const [school, setSchool] = useState(userData.school);
+
+  const toggleModal = () => {
+    setVisible(!visible);
   };
 
-  const closePopup = () => {
-    setVisible(false);
+  const onSubmitForm = (data) => {
+    firestore()
+      .collection("users")
+      .doc(auth().currentUser.uid)
+      .update(data)
+      .then(() => {
+        firestore()
+          .collection("users")
+          .doc(auth().currentUser.uid)
+          .get()
+          .then((doc) => {
+            dispatch(updateUser(doc.data()));
+          })
+          .then(toggleModal);
+      });
   };
+
   const sample = require("../sample.json");
   const { colors } = useTheme();
-
-  const userData = useSelector((sample) => sample.store.value.userData);
 
   const styles = StyleSheet.create({
     container: {
@@ -118,20 +138,32 @@ const Welcome = ({ route, navigation }) => {
       marginLeft: "50%",
       marginTop: "2%",
     },
-    popupButton: {
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#000",
-      width: 100,
-      height: 50,
+    inputText: {
+      fontSize: 12,
+      color: "#000000",
+      fontFamily: "DMSansRegular",
+      padding: 5,
+      borderRadius: 16,
+      marginBottom: 10,
+      borderColor: "#ececec",
+      borderWidth: 1,
+      flex: 0,
     },
-    popupContent: {
+    buttonText: {
+      color: "white",
+      fontFamily: "DMSansBold",
+      textAlign: "center",
+      fontSize: 16,
+    },
+    button: {
+      width: "90%",
+      borderRadius: 25,
+      height: 40,
+      marginVertical: 5,
+      marginHorizontal: "8%",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#fff",
-      borderColor: "#000",
-      borderWidth: "1px",
-      height: 150,
+      alignSelf: "center",
     },
   });
 
@@ -341,21 +373,68 @@ const Welcome = ({ route, navigation }) => {
         </Header>
         <GestureHandlerRootView>
           <ScrollView style={styles.scrollView}>
-            <EditBox
-              visible={visible}
-              transparent={true}
-              dismiss={closePopup}
-              margin={"25%"}
-            >
-              <View style={styles.popupContent}>
-                <Text style={{ fontSize: 18 }}>Popup opened!</Text>
-              </View>
+            <EditBox isVisible={visible}>
+              <ScrollView style={{bottom: 8}}>
+                <Text style={styles.titleText}>Edit General Info</Text>
+                <Text style={styles.subheading2Text}>School</Text>
+                <TextInput
+                  autoCorrect={false}
+                  style={styles.inputText}
+                  placeholder="School"
+                  defaultValue={userData.school}
+                  placeholderTextColor={"gray"}
+                  keyboardAppearance="default"
+                  onChangeText={(text) => setSchool(text)}
+                  maxLength={50}
+                />
+                <Text style={styles.subheading2Text}>Grade/Class</Text>
+                <TextInput
+                  autoCorrect={false}
+                  inputMode="numeric"
+                  keyboardType="number-pad"
+                  style={styles.inputText}
+                  placeholder="Grade"
+                  defaultValue={String(userData.grade)}
+                  placeholderTextColor={"gray"}
+                  keyboardAppearance="default"
+                  onChangeText={(text) => setGrade(parseInt(text))}
+                  maxLength={2}
+                  multiline={false}
+                />
+                <Text style={styles.subheading2Text}>About</Text>
+                <TextInput
+                  autoCorrect={true}
+                  inputMode="text"
+                  keyboardType="default"
+                  style={styles.inputText}
+                  placeholder="About"
+                  defaultValue={userData.about}
+                  placeholderTextColor={"gray"}
+                  keyboardAppearance="default"
+                  onChangeText={(text) => setAbout(text)}
+                  maxLength={1000}
+                  multiline={true}
+                  spellCheck={true}
+                  scrollEnabled={true}
+                  autoCapitalize="sentences"
+                />
+              </ScrollView>
+              <TouchableOpacity style={[styles.button, {backgroundColor: colors.primary}]} onPress={() => onSubmitForm({
+                  "school": school,
+                  "grade": grade,
+                  "about": about,
+                })}>
+                <Text style={styles.buttonText}>Save Changes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, {backgroundColor: "#c7c8c7"}]} onPress={toggleModal}>
+              <Text style={styles.buttonText}>Go Back</Text>
+              </TouchableOpacity>
             </EditBox>
-            <ContentBox onPress={() => console.log("pressed")}>
+            <ContentBox onPress={toggleModal}>
               <View style={{ flex: 1, flexDirection: "row" }}>
                 <Image
                   source={{
-                    uri: auth().currentUser.photoURL,
+                    uri: userData.profileImage,
                   }}
                   width={100}
                   height={100}

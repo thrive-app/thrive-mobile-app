@@ -1,30 +1,19 @@
-import { createContext, useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert, useColorScheme } from "react-native";
+import { createContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateDarkMode } from "../redux/state";
+
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const oldTheme = useSelector((state) => state.store.value.darkMode)
+  const [theme, setTheme] = useState(oldTheme);
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    //load saved theme from async storage
-    const getTheme = async () => {
-      try {
-        const savedTheme = await AsyncStorage.getItem("theme");
-        if (savedTheme) {
-          setTheme(savedTheme);
-        }
-      } catch (error) {
-        Alert.alert("Error", "Theme could not be loaded");
-      }
-    };
-    getTheme();
-  }, []);
 
   const toggleTheme = (newTheme) => {
     setTheme(newTheme);
-    AsyncStorage.setItem("theme", newTheme)
+    dispatch(updateDarkMode(theme))
   };
 
   return (

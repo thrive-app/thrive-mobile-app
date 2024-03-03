@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialStateValue = {
   userData: {},
-  loggedIn: false
+  loggedIn: false,
+  darkMode: "light"
 };
 
 
@@ -15,10 +16,13 @@ export const loggedIn = createSlice({
     },
     updateLoggedIn: (state, action) => {
       state.value.loggedIn = action.payload
+    },
+    updateDarkMode: (state, action) => {
+      state.value.darkMode = action.payload
     }
   },
 });
 
-export const { updateUser, updateLoggedIn } = loggedIn.actions;
+export const { updateUser, updateLoggedIn, updateDarkMode } = loggedIn.actions;
 
 export default loggedIn.reducer;

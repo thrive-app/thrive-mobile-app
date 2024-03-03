@@ -7,11 +7,10 @@ const ThemeSwitch = (props) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleToggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    toggleTheme(newTheme);
+    toggleTheme(theme === "light" ? "dark" : "light");
   };
 
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(theme === "light" ? false : true);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);

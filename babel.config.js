@@ -8,7 +8,7 @@ module.exports = {
       "safe": false,
       "allowUndefined": true,
       "verbose": false
-    }], 'expo-router/babel', "nativewind/babel"
+    }], 'expo-router/babel'
   ]
 };
 

@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   useWindowDimensions,
@@ -23,52 +22,13 @@ import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
 import { updateLoggedIn, updateUser } from "../redux/state";
 import firestore from "@react-native-firebase/firestore";
+import createStyleSheet from "../styles/screens/LoginEmail";
 
 const LoginEmail = ({ navigation, route }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  const styles = StyleSheet.create({
-    text: {
-      color: colors.text,
-      paddingLeft: width / 4 - 7,
-    },
-    buttonText: {
-      color: "white",
-      fontFamily: "DMSansBold",
-      fontSize: 16,
-    },
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    button: {
-      backgroundColor: colors.primary,
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: 10,
-      marginBottom: 10,
-      alignSelf: "center",
-    },
-    inputText: {
-      fontSize: 16,
-      color: "#000000",
-      fontFamily: "DMSansRegular",
-      backgroundColor: "#ececec",
-      width: "100%",
-      padding: 20,
-      borderRadius: 16,
-      marginTop: 10,
-      marginBottom: 10,
-    },
-    image: {
-      alignSelf: "center",
-      margin: "5%",
-    },
-  });
+  const styles = createStyleSheet(colors, width)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

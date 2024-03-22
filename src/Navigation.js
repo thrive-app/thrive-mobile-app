@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext, useState, useEffect } from "react";
 import { Text, ActivityIndicator, View, StyleSheet } from "react-native";
 import LoginPage from "./screens/LoginPage";
-import Welcome from "./screens/Welcome";
+import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
 import LoginEmail from "./screens/LoginEmail";
 import ThemeContext from "./contexts/ThemeContext";
@@ -66,8 +66,8 @@ const RootNavigator = () => {
           <>
             <Stack.Screen
               options={{ headerShown: false }}
-              name="Welcome"
-              component={Welcome}
+              name="Profile"
+              component={Profile}
             />
             <Stack.Screen
               options={{ headerShown: false }}

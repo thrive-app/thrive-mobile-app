@@ -1,6 +1,5 @@
 import {
   SafeAreaView,
-  StyleSheet,
   View,
   TouchableOpacity,
   Text,
@@ -11,57 +10,18 @@ import ThemeSwitch from "../components/ThemeSwitch";
 import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
 import { updateLoggedIn, updateUser } from "../redux/state";
+import createStyleSheet from "../styles/screens/Settings";
 
 export const Settings = ({ navigation }) => {
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  const styles = StyleSheet.create({
-    text: {
-      color: colors.text,
-      fontSize: 24,
-      fontFamily: "DMSansBold",
-      paddingLeft: "18%",
-      paddingRight: "5%",
-      textAlign: "center",
-      alignSelf: "center",
-    },
-    container: {
-      alignContent: "center",
-      justifyContent: "center",
-      flex: 0,
-    },
-    backButton: {
-      backgroundColor: colors.primary,
-      borderRadius: 25,
-      width: "10%",
-      marginLeft: 20,
-      margin: 75,
-      alignItems: "center",
-    },
-    buttonText: {
-      color: "white",
-      fontFamily: "DMSansBold",
-      textAlign: "center",
-      fontSize: 16,
-    },
-    button: {
-      backgroundColor: "red",
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      marginVertical: "50%",
-      marginHorizontal: "8%",
-      justifyContent: "center",
-      alignItems: "center",
-      alignSelf: "center",
-    },
-  });
+  const styles = createStyleSheet(colors);
 
   return (
     <SafeAreaView>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.navigate("Welcome")}
+        onPress={() => navigation.navigate("Profile")}
       >
         <Ionicons name="arrow-back" size={24} color="white" />
       </TouchableOpacity>

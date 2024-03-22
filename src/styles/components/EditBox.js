@@ -1,11 +1,7 @@
-import Modal from "react-native-modal";
-import { StyleSheet, View } from "react-native";
-import { useTheme } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
 
-const EditBox = (props) => {
-  const { colors } = useTheme();
-
-  const styles = StyleSheet.create({
+const createStyleSheet = (colors) => {
+  return StyleSheet.create({
     box: {
       width: "95%",
       height: "85%",
@@ -27,12 +23,6 @@ const EditBox = (props) => {
       height: 24,
     },
   });
-  const { type, children, ...other } = props;
-  return (
-    <Modal {...other}>
-      <View style={styles.box}>{children}</View>
-    </Modal>
-  );
-};
+}
 
-export default EditBox;
+export default createStyleSheet;

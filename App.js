@@ -1,19 +1,19 @@
-import Navigation from "./Navigation";
+import Navigation from "./src/Navigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import BetterStatusBar from "./components/StatusBar";
+import { ThemeProvider } from "./src/contexts/ThemeContext";
+import BetterStatusBar from "./src/components/StatusBar";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import dataReducer from "./redux/state";
+import dataReducer from "./src/redux/state";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    DMSansRegular: require("./assets/fonts/DMSans-Regular.ttf"),
-    DMSansMedium: require("./assets/fonts/DMSans-Medium.ttf"),
-    DMSansBold: require("./assets/fonts/DMSans-Bold.ttf"),
+    DMSansRegular: require("./src/assets/fonts/DMSans-Regular.ttf"),
+    DMSansMedium: require("./src/assets/fonts/DMSans-Medium.ttf"),
+    DMSansBold: require("./src/assets/fonts/DMSans-Bold.ttf"),
   });
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {

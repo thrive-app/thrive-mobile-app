@@ -1,0 +1,115 @@
+import { StyleSheet } from "react-native";
+
+const createStyleSheet = (colors) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    scrollView: {
+      backgroundColor: colors.background,
+      alignContent: "center",
+    },
+    titleText: {
+      fontFamily: "DMSansBold",
+      fontSize: 24,
+      margin: 10,
+      paddingVertical: 20,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.text,
+    },
+    title2Text: {
+      fontFamily: "DMSansRegular",
+      fontSize: 24,
+      margin: 10,
+      paddingVertical: 10,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.text,
+    },
+    grayBody: {
+      fontFamily: "DMSansRegular",
+      fontSize: 11,
+      flex: 1,
+      flexWrap: "wrap",
+      color: "#696969",
+      marginLeft: 5,
+    },
+    subheadingText: {
+      fontFamily: "DMSansBold",
+      fontSize: 20,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.text,
+      marginLeft: 5,
+      marginBottom: 5,
+    },
+    subheading2Text: {
+      fontFamily: "DMSansBold",
+      fontSize: 16,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.subheading,
+      marginLeft: 10,
+      marginTop: 10,
+      marginBottom: 5,
+    },
+    description: {
+      fontFamily: "DMSansRegular",
+      fontSize: 14,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.subheading,
+      marginLeft: 10,
+      marginBottom: 5,
+    },
+    bodyText: {
+      fontFamily: "DMSansRegular",
+      marginLeft: 10,
+      marginVertical: 1,
+      color: colors.text,
+      fontSize: 12,
+    },
+    image: {
+      width: 100,
+      height: 100,
+      borderRadius: 100 / 2,
+      overflow: "hidden",
+    },
+    settings: {
+      position: "relative",
+      marginLeft: "50%",
+      marginTop: "2%",
+    },
+    inputText: {
+      fontSize: 12,
+      color: "#000000",
+      fontFamily: "DMSansRegular",
+      padding: 5,
+      borderRadius: 16,
+      marginBottom: 10,
+      borderColor: "#ececec",
+      borderWidth: 1,
+      flex: 0,
+    },
+    buttonText: {
+      color: "white",
+      fontFamily: "DMSansBold",
+      textAlign: "center",
+      fontSize: 16,
+    },
+    button: {
+      width: "90%",
+      borderRadius: 25,
+      height: 40,
+      marginVertical: 5,
+      marginHorizontal: "8%",
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: "center",
+    },
+  });
+};
+
+export default createStyleSheet;

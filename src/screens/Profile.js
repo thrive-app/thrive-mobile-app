@@ -33,8 +33,19 @@ import { updateUser } from "../redux/state";
 //import { gradient } from "../themes";
 import createStyleSheet from "../styles/screens/Profile";
 import findStarred from "../functions/profile/findStarred";
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
 
-
+//html for pdf file
+const html = '<html> <body> <h1>Hello </h1></body> </html>';
+//generate pdf function
+let generatePdf = async () => {
+  const file = await printToFileAsync({
+    html: html,
+    base64: false
+  });
+  await shareAsync(file.uri);
+}
 const Profile = ({ route, navigation }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
   const dispatch = useDispatch();
@@ -128,7 +139,7 @@ const Profile = ({ route, navigation }) => {
         <Text style={styles.description}>
           <Text style={{ fontFamily: "DMSansBold" }}>{item.employer} || </Text>
           <Text style={{ fontFamily: "DMSansMedium" }}>
-            {item.city}, {item.state} || {}
+            {item.city}, {item.state} || { }
           </Text>
           {item.startDate}-{item.endDate}
         </Text>
@@ -541,6 +552,7 @@ const Profile = ({ route, navigation }) => {
             keyExtractor={(item) => boxes.indexOf(item)}
           />
         </GestureHandlerRootView>
+        <Button title="GeneratePdf" onPress={generatePdf} />
       </SafeAreaView>
     </>
   );

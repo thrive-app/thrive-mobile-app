@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Button
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
@@ -33,6 +34,36 @@ import { updateUser } from "../redux/state";
 //import { gradient } from "../themes";
 import createStyleSheet from "../styles/screens/Profile";
 import findStarred from "../functions/profile/findStarred";
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from 'expo-sharing';
+import EditItem from "../components/EditItem";
+
+
+//html for pdf file
+const html = `
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  </head>
+  <body style="text-align: center;">
+    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
+      Hello Expo!
+    </h1>
+    <img
+      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
+      style="width: 90vw;" />
+    </body>
+</html>`;
+
+
+//generate pdf function
+const printToFile = async () => {
+  // On iOS/android prints the given html. On web prints the HTML from the current page.
+  const { uri } = await printToFileAsync({ html });
+  console.log('File has been saved to:', uri);
+  await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+};
+
 
 
 const Profile = ({ route, navigation }) => {
@@ -446,6 +477,7 @@ const Profile = ({ route, navigation }) => {
     ecsBox,
     performingArtsBox,
     awardsBox,
+    <Button title="share pdf" onPress={printToFile}/>,
     <View style={{ height: 150 }} />,
   ];
 
@@ -467,6 +499,8 @@ const Profile = ({ route, navigation }) => {
           />
         </Header>
         <GestureHandlerRootView>
+            
+          <EditItem starred={true} text={"web developtmetn"} />
           <EditBox isVisible={visible}>
             <ScrollView style={{ bottom: 8 }}>
               <Text style={styles.titleText}>Edit General Info</Text>
@@ -540,7 +574,11 @@ const Profile = ({ route, navigation }) => {
             renderItem={({ item }) => item}
             keyExtractor={(item) => boxes.indexOf(item)}
           />
+          
         </GestureHandlerRootView>
+        <View>
+          <Button title="share pdf" onPress={printToFile}/>
+            </View> 
       </SafeAreaView>
     </>
   );

@@ -13,7 +13,7 @@ const ContentBox = (props) => {
   return (
     <View style={styles.box}>
       <View style={styles.edit}>
-        <EditIconSVG onPress={props.onPress} />
+        <EditIconSVG color="#cecece" onPress={props.onPress} />
       </View>
       {
         // returns whatever is enclosed between the <ContextBox> tags

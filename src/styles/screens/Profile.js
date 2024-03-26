@@ -84,7 +84,7 @@ const createStyleSheet = (colors) => {
     },
     inputText: {
       fontSize: 12,
-      color: "#000000",
+      color: colors.text,
       fontFamily: "DMSansRegular",
       padding: 5,
       borderRadius: 16,

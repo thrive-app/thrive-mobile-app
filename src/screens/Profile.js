@@ -32,6 +32,8 @@ import { updateUser } from "../redux/state";
 //import { LinearGradient } from "expo-linear-gradient"
 //import { gradient } from "../themes";
 import createStyleSheet from "../styles/screens/Profile";
+import findStarred from "../functions/profile/findStarred";
+
 
 const Profile = ({ route, navigation }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -69,7 +71,7 @@ const Profile = ({ route, navigation }) => {
 
   const { colors } = useTheme();
 
-  const styles = createStyleSheet(colors)
+  const styles = createStyleSheet(colors);
 
   function gradeSwitch() {
     switch (userData.grade) {
@@ -88,16 +90,6 @@ const Profile = ({ route, navigation }) => {
       default:
         return "Grade " + userData.grade;
     }
-  }
-
-  function findStarred(arr) {
-    let index;
-    for (i = 0; i < arr.length; i++) {
-      if (arr[i].starred) {
-        index = i;
-      }
-    }
-    return index;
   }
 
   const renderCourse = (info) => {
@@ -184,43 +176,45 @@ const Profile = ({ route, navigation }) => {
     );
   };
 
-  const renderAwards = userData.awards
-    ? userData.awards.map((award) => (
-        <>
-          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-            {award.starred ? <StarSVG /> : null}
-            <Text
-              style={{
-                fontFamily: "DMSansBold",
-                flexWrap: "nowrap",
-                color: colors.text,
-                flex: 0,
-              }}
-            >
-              {award.title}{" "}
-              <Text style={{ fontFamily: "DMSansRegular" }}>
-                | {award.year}
-              </Text>
-            </Text>
-          </View>
-        </>
-      ))
-    : null;
-
-  const renderPerformingArts = userData.performingArts
-    ? userData.performingArts.map((work) => (
-        <>
-          <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
-            {work.starred ? <StarSVG /> : null}
-            <Text style={styles.subheadingText}>{work.name}</Text>
-          </View>
-          <Text style={styles.description}>
-            {work.startDate}-{work.endDate}
+  const renderAwards = (item) => {
+    return (
+      <>
+        <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+          {item.starred ? <StarSVG /> : null}
+          <Text
+            style={{
+              fontFamily: "DMSansBold",
+              flexWrap: "nowrap",
+              color: colors.text,
+              flex: 0,
+              left: 5
+            }}
+          >
+            {item.title}{" "}
+            <Text style={{ fontFamily: "DMSansRegular" }}>| {item.year}</Text>
           </Text>
-          <Text style={styles.bodyText}>{work.description}</Text>
-        </>
-      ))
-    : null;
+        </View>
+        <Text style={styles.bodyText}>{item.description}</Text>
+        <View style={{ height: 30 }} />
+      </>
+    );
+  };
+
+  const renderPerformingArts = (item) => {
+    return (
+      <>
+        <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
+          {item.starred ? <StarSVG /> : null}
+          <Text style={styles.subheadingText}>{item.name}</Text>
+        </View>
+        <Text style={styles.description}>
+          {item.startDate}-{item.endDate}
+        </Text>
+        <Text style={styles.bodyText}>{item.description}</Text>
+        <View style={{ height: 30 }} />
+      </>
+    );
+  };
 
   const editWorkExperience = () => {
     console.log("edited");
@@ -420,14 +414,26 @@ const Profile = ({ route, navigation }) => {
   const performingArtsBox = (
     <ContentBox>
       <Text style={styles.titleText}>Performing Arts</Text>
-      {renderPerformingArts}
+      {userData.performingArts ? (
+        <FlatList
+          data={userData.performingArts}
+          renderItem={({ item }) => renderPerformingArts(item)}
+          keyExtractor={(item) => userData.performingArts.indexOf(item)}
+        />
+      ) : null}
     </ContentBox>
   );
 
   const awardsBox = (
     <ContentBox>
       <Text style={styles.titleText}>Awards/Honors</Text>
-      {renderAwards}
+      {userData.awards ? (
+        <FlatList
+          data={userData.awards}
+          renderItem={({ item }) => renderAwards(item)}
+          keyExtractor={(item) => userData.awards.indexOf(item)}
+        />
+      ) : null}
     </ContentBox>
   );
 

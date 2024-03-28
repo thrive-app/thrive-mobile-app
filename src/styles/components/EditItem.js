@@ -5,26 +5,25 @@ const createStyleSheet = (colors) => {
     box: {
       width: "75%",
       alignSelf: "center",
-      height: "8%",
       flexDirection: "row",
-      flex: 0,
+      flex: 1,
       borderRadius: 10,
       borderColor: "#a6a6a6",
       borderWidth: 1,
       marginTop: 15,
       paddingHorizontal: 15,
       position: "relative",
+      paddingVertical: 10
     },
     star: {
       position: "relative",
       alignSelf: "flex-start",
       width: "10%",
       height: "10%",
-      top: "4%",
       flex: 0,
     },
     text: {
-      fontSize: 13,
+      fontSize: 16,
       fontFamily: "DMSansBold",
       color: colors.text,
       bottom: 15,
@@ -32,11 +31,11 @@ const createStyleSheet = (colors) => {
     },
     textContainer: {
       alignSelf: "center",
-      alignItems: "flex-start",
+      alignItems: "center",
       flex: 0,
       width: "70%",
       left: "50%",
-      top: "10%",
+      top: "8%",
     },
     menuContainer: {
       flex: 1,
@@ -44,7 +43,6 @@ const createStyleSheet = (colors) => {
     },
     menu: {
       left: "65%",
-      top: "20%",
       position: "absolute",
       backgroundColor: colors.background,
     },

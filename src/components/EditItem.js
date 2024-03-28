@@ -9,15 +9,12 @@ import TrashSVG from "../assets/svg/TrashSVG";
 import EditIconSVG from "../assets/svg/EditIconSVG";
 import { Ionicons } from "@expo/vector-icons";
 
-
 const EditItem = ({ starred, text, options }) => {
   const { colors } = useTheme();
   const styles = createStyleSheet(colors);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+
 
   return (
     <>
@@ -31,7 +28,7 @@ const EditItem = ({ starred, text, options }) => {
           </Text>
         </View>
         <View style={styles.menuContainer}>
-          <VerticalDotMenuSVG style={styles.menu} onPress={toggleModal} />
+          <VerticalDotMenuSVG style={styles.menu} onPress={() => setModalVisible(!isModalVisible)} />
           <ReactNativeModal isVisible={isModalVisible}>
             <View style={styles.popupContent}>
               <Text style={styles.titleText}>
@@ -39,15 +36,24 @@ const EditItem = ({ starred, text, options }) => {
                 {<Text style={{ fontFamily: "DMSansBold" }}>{text}</Text>}"?
               </Text>
               <View style={styles.smallButtonContainer}>
-              <TouchableOpacity style={[styles.smallButton, { backgroundColor: "red" }]}>
-                <TrashSVG width={30} height={30} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.smallButton, { backgroundColor: "#cecece" }]}>
-                <EditIconSVG width={30} height={30} color="white" />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.smallButton, { backgroundColor: "red" }]}
+                  onPress={options.trash}
+                >
+                  <TrashSVG width={30} height={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.smallButton, { backgroundColor: "#cecece" }]}
+                  onPress={options.edit}
+                >
+                  <EditIconSVG width={30} height={30} color="white" />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={toggleModal}>
-              <Text style={styles.buttonText}>Go Back</Text>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: colors.primary }]}
+                onPress={() => setModalVisible(!isModalVisible)}
+              >
+                <Text style={styles.buttonText}>Go Back</Text>
               </TouchableOpacity>
             </View>
           </ReactNativeModal>

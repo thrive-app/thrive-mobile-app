@@ -9,9 +9,9 @@ const EditBox = (props) => {
 
   const { type, children, ...other } = props;
   return (
-    <ReactNativeModal {...other}>
-      <View style={styles.box}>{children}</View>
-    </ReactNativeModal>
+    
+      <View {...other} style={styles.box}>{children}</View>
+      
   );
 };
 

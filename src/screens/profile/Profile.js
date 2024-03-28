@@ -2,42 +2,33 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity,
-  TextInput,
   FlatList,
-  Button
+  Button,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   GestureHandlerRootView,
-  ScrollView,
 } from "react-native-gesture-handler";
-import ContentBox from "../components/ContentBox";
-import Header from "../components/Header";
-import SettingsSVG from "../assets/svg/SettingsSVG";
-import HatSVG from "../assets/svg/HatSVG";
-import BuildingSVG from "../assets/svg/BuildingSVG";
-import VolunteerSVG from "../assets/svg/VolunteerSVG";
-import TrophySVG from "../assets/svg/TrophySVG";
-import GroupSVG from "../assets/svg/GroupSVG";
-import MedalSVG from "../assets/svg/MedalSVG";
-import TheaterSVG from "../assets/svg/TheaterSVG";
-import StarSVG from "../assets/svg/StarSVG";
+import ContentBox from "../../components/ContentBox";
+import Header from "../../components/Header";
+import SettingsSVG from "../../assets/svg/SettingsSVG";
+import HatSVG from "../../assets/svg/HatSVG";
+import BuildingSVG from "../../assets/svg/BuildingSVG";
+import VolunteerSVG from "../../assets/svg/VolunteerSVG";
+import TrophySVG from "../../assets/svg/TrophySVG";
+import GroupSVG from "../../assets/svg/GroupSVG";
+import MedalSVG from "../../assets/svg/MedalSVG";
+import TheaterSVG from "../../assets/svg/TheaterSVG";
+import StarSVG from "../../assets/svg/StarSVG";
 import { useSelector, useDispatch } from "react-redux";
-import EditBox from "../components/EditBox";
-import firestore from "@react-native-firebase/firestore";
-import auth from "@react-native-firebase/auth";
-import { updateUser } from "../redux/state";
 //import { LinearGradient } from "expo-linear-gradient"
 //import { gradient } from "../themes";
-import createStyleSheet from "../styles/screens/Profile";
-import findStarred from "../functions/profile/findStarred";
+import createStyleSheet from "../../styles/screens/Profile";
+import findStarred from "../../functions/profile/findStarred";
 import { printToFileAsync } from "expo-print";
-import { shareAsync } from 'expo-sharing';
-import EditItem from "../components/EditItem";
-
+import { shareAsync } from "expo-sharing";
 
 //html for pdf file
 const html = `
@@ -55,50 +46,17 @@ const html = `
     </body>
 </html>`;
 
-
 //generate pdf function
 const printToFile = async () => {
   // On iOS/android prints the given html. On web prints the HTML from the current page.
   const { uri } = await printToFileAsync({ html });
-  console.log('File has been saved to:', uri);
-  await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+  console.log("File has been saved to:", uri);
+  await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
 };
-
-
 
 const Profile = ({ route, navigation }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
   const dispatch = useDispatch();
-  const [visible, setVisible] = useState(false);
-  const [grade, setGrade] = useState(userData.grade);
-  const [about, setAbout] = useState(userData.about);
-  const [school, setSchool] = useState(userData.school);
-
-  const toggleModal = () => {
-    setVisible(!visible);
-  };
-
-  const onSubmitForm = (data) => {
-    //update only affected DB fields (REST API PATCH)
-    firestore()
-      .collection("users")
-      .doc(auth().currentUser.uid)
-      .update(data)
-      .then(() => {
-        //GET updated user data
-        firestore()
-          .collection("users")
-          .doc(auth().currentUser.uid)
-          .get()
-          .then((doc) => {
-            //update Redux (business layer) in-memory data store
-            dispatch(updateUser(doc.data()));
-          })
-
-          //close window
-          .then(toggleModal);
-      });
-  };
 
   const { colors } = useTheme();
 
@@ -135,7 +93,13 @@ const Profile = ({ route, navigation }) => {
       text = "AP " + info.name;
     }
     if (info.type === "AP" && info.score != -1) {
-      text = "AP " + info.name + " | AP Test Score: " + info.score;
+      text = "AP " + info.name + " | Test Score: " + info.score;
+    }
+    if (info.type === "IB" && info.score === -1) {
+      text = "IB " + info.name;
+    }
+    if (info.type === "IB" && info.score != -1) {
+      text = "IB " + info.name + " | Test Score: " + info.score;
     }
     return <Text style={styles.bodyText}>{text}</Text>;
   };
@@ -157,9 +121,9 @@ const Profile = ({ route, navigation }) => {
           <Text style={styles.subheadingText}>{item.jobTitle}</Text>
         </View>
         <Text style={styles.description}>
-          <Text style={{ fontFamily: "DMSansBold" }}>{item.employer} || </Text>
+          <Text style={{ fontFamily: "DMSansBold" }}>{item.employer} // </Text>
           <Text style={{ fontFamily: "DMSansMedium" }}>
-            {item.city}, {item.state} || {}
+            {item.location} // {}
           </Text>
           {item.startDate}-{item.endDate}
         </Text>
@@ -194,9 +158,9 @@ const Profile = ({ route, navigation }) => {
           <Text style={styles.subheadingText}>{item.name}</Text>
         </View>
         <Text style={styles.description}>
-          {userData.ecs.position ? (
+          {item.position != "" ? (
             <Text style={{ fontFamily: "DMSansBold" }}>
-              {item.position} || {""}
+              {item.position} // {""}
             </Text>
           ) : null}
           {item.startDate}-{item.endDate}
@@ -212,19 +176,13 @@ const Profile = ({ route, navigation }) => {
       <>
         <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
           {item.starred ? <StarSVG /> : null}
-          <Text
-            style={{
-              fontFamily: "DMSansBold",
-              flexWrap: "nowrap",
-              color: colors.text,
-              flex: 0,
-              left: 5
-            }}
-          >
-            {item.title}{" "}
-            <Text style={{ fontFamily: "DMSansRegular" }}>| {item.year}</Text>
-          </Text>
+          <Text style={styles.subheadingText}>{item.title} </Text>
         </View>
+
+        <Text style={[styles.description, {fontSize: 15}]}>
+          <Text style={{ fontFamily: "DMSansBold" }}>{item.provider} // </Text>
+          {item.year}
+        </Text>
         <Text style={styles.bodyText}>{item.description}</Text>
         <View style={{ height: 30 }} />
       </>
@@ -247,10 +205,6 @@ const Profile = ({ route, navigation }) => {
     );
   };
 
-  const editWorkExperience = () => {
-    console.log("edited");
-  };
-
   const starredWork = userData.workExperience
     ? userData.workExperience[findStarred(userData.workExperience)]
     : null;
@@ -271,7 +225,7 @@ const Profile = ({ route, navigation }) => {
     : null;
 
   const generalInfoBox = (
-    <ContentBox onPress={toggleModal}>
+    <ContentBox onPress={() => navigation.navigate("EditGeneralInfo")}>
       <View style={{ flex: 1, flexDirection: "row" }}>
         <Image
           source={{
@@ -321,7 +275,8 @@ const Profile = ({ route, navigation }) => {
         <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
           <GroupSVG width={20} height={16} />
           <Text style={styles.grayBody}>
-            {starredEC.name} {starredEC.position}
+            {starredEC.name}{" "}
+            {starredEC.position != "" ? `| ${starredEC.position}` : ""}
           </Text>
         </View>
       ) : null}
@@ -352,35 +307,37 @@ const Profile = ({ route, navigation }) => {
           alignSelf: "center",
         }}
       />
-      <Text style={styles.title2Text}>About</Text>
-      <Text style={styles.bodyText}>
-        {userData.about ? userData.about : null}
-      </Text>
+      {userData.about != "" ? (
+        <>
+          <Text style={styles.title2Text}>About</Text>
+          <Text style={styles.bodyText}>{userData.about}</Text>
+        </>
+      ) : null}
     </ContentBox>
   );
 
+  
   const academicsBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("AcademicsHome")}>
       <Text style={styles.titleText}>Academics</Text>
-      {userData.academics.courses ? (
+      {userData.courses ? (
         <>
           <Text style={styles.subheading2Text}>Courses</Text>
-
           <FlatList
-            data={userData.academics.courses}
+            data={userData.courses}
             renderItem={({ item }) => renderCourse(item)}
-            keyExtractor={(item) => userData.academics.courses.indexOf(item)}
+            keyExtractor={(item) => userData.courses.indexOf(item)}
           />
         </>
       ) : null}
 
-      {userData.academics.testScores ? (
+      {userData.testScores ? (
         <>
           <Text style={styles.subheading2Text}>Test Scores</Text>
           <FlatList
-            data={userData.academics.testScores}
+            data={userData.testScores}
             renderItem={({ item }) => renderTestScores(item)}
-            keyExtractor={(item) => userData.academics.testScores.indexOf(item)}
+            keyExtractor={(item) => userData.testScores.indexOf(item)}
           />
         </>
       ) : null}
@@ -388,7 +345,7 @@ const Profile = ({ route, navigation }) => {
   );
 
   const workExperienceBox = (
-    <ContentBox onPress={() => editWorkExperience}>
+    <ContentBox onPress={() => navigation.navigate("WorkExperienceHome")}>
       <Text style={styles.titleText}>Work Experience</Text>
       {/* only renders work experience if the corresponding object
       in the database exists; if the object exists, then a FlatList
@@ -404,20 +361,19 @@ const Profile = ({ route, navigation }) => {
   );
 
   const volunteerBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("VolunteerWorkHome")}>
       <Text style={styles.titleText}>Volunteer Work</Text>
       {userData.volunteerWork ? (
         <FlatList
           data={userData.volunteerWork}
           renderItem={({ item }) => renderWork(item)}
-          keyExtractor={(item) => userData.workExperience.indexOf(item)}
+          keyExtractor={(item) => userData.volunteerWork.indexOf(item)}
         />
       ) : null}
     </ContentBox>
   );
-
   const athleticsBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("AthleticsHome")}>
       <Text style={styles.titleText}>Athletics</Text>
       {userData.athletics ? (
         <FlatList
@@ -430,7 +386,7 @@ const Profile = ({ route, navigation }) => {
   );
 
   const ecsBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("ECsHome")}>
       <Text style={styles.titleText}>Extracurricular Activities/Clubs</Text>
       {userData.ecs ? (
         <FlatList
@@ -443,7 +399,7 @@ const Profile = ({ route, navigation }) => {
   );
 
   const performingArtsBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("PerformingArtsHome")}>
       <Text style={styles.titleText}>Performing Arts</Text>
       {userData.performingArts ? (
         <FlatList
@@ -456,7 +412,7 @@ const Profile = ({ route, navigation }) => {
   );
 
   const awardsBox = (
-    <ContentBox>
+    <ContentBox onPress={() => navigation.navigate("AwardsHome")}>
       <Text style={styles.titleText}>Awards/Honors</Text>
       {userData.awards ? (
         <FlatList
@@ -477,111 +433,43 @@ const Profile = ({ route, navigation }) => {
     ecsBox,
     performingArtsBox,
     awardsBox,
-    <Button title="share pdf" onPress={printToFile}/>,
+    <Button title="share pdf" onPress={printToFile} />,
     <View style={{ height: 150 }} />,
   ];
 
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <Header
-          onPress={() => {
-            navigation.navigate("Settings");
-          }}
-        >
-          <SettingsSVG
-            width={40}
-            height={40}
-            style={styles.settings}
+        <GestureHandlerRootView>
+          <Header
             onPress={() => {
               navigation.navigate("Settings");
             }}
-          />
-        </Header>
-        <GestureHandlerRootView>
-            
-          <EditItem starred={true} text={"web developtmetn"} />
-          <EditBox isVisible={visible}>
-            <ScrollView style={{ bottom: 8 }}>
-              <Text style={styles.titleText}>Edit General Info</Text>
-              <Text style={styles.subheading2Text}>School</Text>
-              <TextInput
-                autoCorrect={false}
-                style={styles.inputText}
-                placeholder="School"
-                defaultValue={userData.school}
-                placeholderTextColor={"gray"}
-                keyboardAppearance="default"
-                onChangeText={(text) => setSchool(text)}
-                maxLength={50}
-              />
-              <Text style={styles.subheading2Text}>Grade/Class</Text>
-              <TextInput
-                autoCorrect={false}
-                inputMode="numeric"
-                keyboardType="number-pad"
-                style={styles.inputText}
-                placeholder="Grade"
-                defaultValue={String(userData.grade)}
-                placeholderTextColor={"gray"}
-                keyboardAppearance="default"
-                onChangeText={(text) => setGrade(parseInt(text))}
-                maxLength={2}
-                multiline={false}
-              />
-              <Text style={styles.subheading2Text}>About</Text>
-              <TextInput
-                autoCorrect={true}
-                inputMode="text"
-                keyboardType="default"
-                style={styles.inputText}
-                placeholder="About"
-                defaultValue={userData.about}
-                placeholderTextColor={"gray"}
-                keyboardAppearance="default"
-                onChangeText={(text) => setAbout(text)}
-                maxLength={1000}
-                multiline={true}
-                spellCheck={true}
-                scrollEnabled={true}
-                autoCapitalize="sentences"
-              />
-            </ScrollView>
-
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: colors.primary }]}
-              onPress={() =>
-                onSubmitForm({
-                  school: school,
-                  grade: grade,
-                  about: about,
-                })
-              }
-            >
-              <Text style={styles.buttonText}>Save Changes</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#c7c8c7" }]}
-              onPress={toggleModal}
-            >
-              <Text style={styles.buttonText}>Go Back</Text>
-            </TouchableOpacity>
-          </EditBox>
-
+          >
+            <SettingsSVG
+              width={40}
+              height={40}
+              style={styles.settings}
+              onPress={() => {
+                navigation.navigate("Settings");
+              }}
+            />
+          </Header>
           <FlatList
             data={boxes}
             renderItem={({ item }) => item}
             keyExtractor={(item) => boxes.indexOf(item)}
           />
-          
+          <View>
+            <Button title="share pdf" onPress={printToFile} />
+          </View>
         </GestureHandlerRootView>
-        <View>
-          <Button title="share pdf" onPress={printToFile}/>
-            </View> 
       </SafeAreaView>
     </>
   );
 };
+
+export const CoursesForm = ({ navigation, route }) => {};
+
 
 export default Profile;

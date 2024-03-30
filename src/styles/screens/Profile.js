@@ -124,6 +124,14 @@ const createStyleSheet = (colors) => {
       justifyContent: "center",
       marginVertical: "5%",
     },
+    popupContent: {
+      backgroundColor: colors.background,
+      padding: 20,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: colors.primary,
+    },
   });
 };
 

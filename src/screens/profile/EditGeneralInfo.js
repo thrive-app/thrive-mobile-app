@@ -47,7 +47,9 @@ export const EditGeneralInfo = ({ navigation }) => {
       <GestureHandlerRootView>
         <ScrollView style={{ bottom: 8 }}>
           <Text style={styles.titleText}>Edit General Info</Text>
-          <Text style={styles.subheading2Text}>School<Text style={{ color: "red" }}>*</Text></Text>
+          <Text style={styles.subheading2Text}>
+            School<Text style={{ color: "red" }}>*</Text>
+          </Text>
           <TextInput
             autoCorrect={false}
             style={styles.inputText}
@@ -58,7 +60,9 @@ export const EditGeneralInfo = ({ navigation }) => {
             onChangeText={(text) => setSchool(text)}
             maxLength={50}
           />
-          <Text style={styles.subheading2Text}>Grade/Class<Text style={{ color: "red" }}>*</Text></Text>
+          <Text style={styles.subheading2Text}>
+            Grade/Class<Text style={{ color: "red" }}>*</Text>
+          </Text>
           <TextInput
             autoCorrect={false}
             inputMode="numeric"

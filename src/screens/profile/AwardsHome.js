@@ -8,6 +8,7 @@ import auth from "@react-native-firebase/auth";
 import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import EditItem from "../../components/EditItem";
+import PlusSVG from "../../assets/svg/PlusSVG";
 
 export const AwardsHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -44,7 +45,7 @@ export const AwardsHome = ({ navigation, route }) => {
   return (
     <EditBox>
       <Text style={[styles.titleText, { flex: 0 }]}>Edit Awards/Honors</Text>
-    
+
       <FlatList
         style={{ flex: 1 }}
         data={userData.awards}
@@ -58,15 +59,43 @@ export const AwardsHome = ({ navigation, route }) => {
                   payload: item,
                   title: "Edit Awards/Honors",
                 }),
-              trash: () =>
-                deleteItem(userData.awards, "awards", item),
+              trash: () => deleteItem(userData.awards, "awards", item),
             }}
           />
         )}
         keyExtractor={(item) => userData.awards.indexOf(item)}
       />
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary }]}
+        style={[
+          styles.smallButton,
+          {
+            backgroundColor: colors.primary,
+            right: "20%",
+            width: 66,
+            height: 66,
+            borderRadius: 33,
+            left: "0%",
+            marginVertical: "10%",
+          },
+        ]}
+        onPress={() =>
+          navigation.navigate("AwardsForm", {
+            payload: {
+              starred: false,
+              title: "",
+              provider: "",
+              year: "",
+              description: "",
+            },
+            title: "Add Awards/Honors",
+            create: true,
+          })
+        }
+      >
+        <PlusSVG width={36} height={36} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#c7c8c7" }]}
         onPress={() => navigation.navigate("Profile")}
       >
         <Text style={styles.buttonText}>Go Back</Text>

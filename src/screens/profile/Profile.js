@@ -1,16 +1,8 @@
-import {
-  Text,
-  View,
-  Image,
-  FlatList,
-  Button,
-} from "react-native";
+import { Text, View, Image, FlatList, Button } from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ContentBox from "../../components/ContentBox";
 import Header from "../../components/Header";
 import SettingsSVG from "../../assets/svg/SettingsSVG";
@@ -179,7 +171,7 @@ const Profile = ({ route, navigation }) => {
           <Text style={styles.subheadingText}>{item.title} </Text>
         </View>
 
-        <Text style={[styles.description, {fontSize: 15}]}>
+        <Text style={[styles.description, { fontSize: 15 }]}>
           <Text style={{ fontFamily: "DMSansBold" }}>{item.provider} // </Text>
           {item.year}
         </Text>
@@ -239,7 +231,7 @@ const Profile = ({ route, navigation }) => {
           {userData.firstName + " " + userData.lastName}
         </Text>
       </View>
-      {userData.grade && userData.school ? (
+      {userData.grade > 0 && !(userData.school === "") ? (
         <View
           style={{
             flex: 1,
@@ -276,7 +268,7 @@ const Profile = ({ route, navigation }) => {
           <GroupSVG width={20} height={16} />
           <Text style={styles.grayBody}>
             {starredEC.name}{" "}
-            {starredEC.position != "" ? `| ${starredEC.position}` : ""}
+            {starredEC.position != "" ? `// ${starredEC.position}` : ""}
           </Text>
         </View>
       ) : null}
@@ -289,13 +281,15 @@ const Profile = ({ route, navigation }) => {
       {starredAthletics ? (
         <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
           <TrophySVG width={20} height={16} />
-          <Text style={styles.grayBody}>{starredAthletics.name}</Text>
+          <Text style={styles.grayBody}>{starredAthletics.sport}</Text>
         </View>
       ) : null}
       {starredAward ? (
         <View style={{ flex: 1, flexDirection: "row", margin: 5 }}>
           <MedalSVG width={20} height={16} />
-          <Text style={styles.grayBody}>{starredAward.title}</Text>
+          <Text style={styles.grayBody}>
+            {starredAward.title} // {starredAward.provider}
+          </Text>
         </View>
       ) : null}
       <View
@@ -316,7 +310,6 @@ const Profile = ({ route, navigation }) => {
     </ContentBox>
   );
 
-  
   const academicsBox = (
     <ContentBox onPress={() => navigation.navigate("AcademicsHome")}>
       <Text style={styles.titleText}>Academics</Text>
@@ -470,6 +463,5 @@ const Profile = ({ route, navigation }) => {
 };
 
 export const CoursesForm = ({ navigation, route }) => {};
-
 
 export default Profile;

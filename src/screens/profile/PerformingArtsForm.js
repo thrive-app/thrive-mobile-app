@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import React, { useState } from "react";
@@ -28,7 +29,7 @@ export const PerformingArtsForm = ({ navigation, route }) => {
   const { colors } = useTheme();
   const styles = createStyleSheet(colors);
 
-  const { payload, title } = route.params;
+  const { payload, title, create } = route.params;
 
   const [starred, setStarred] = useState(payload.starred);
   const [name, setName] = useState(payload.name);
@@ -39,9 +40,18 @@ export const PerformingArtsForm = ({ navigation, route }) => {
   );
 
   const onSubmitForm = (data) => {
-    const userDataCopy = [...userData.performingArts];
-    const index = userDataCopy.indexOf(payload);
-    userDataCopy[index] = data;
+    let userDataCopy = [];
+    if (userData.performingArts) {
+      userDataCopy = [...userData.performingArts];
+    } else {
+      userDataCopy = [];
+    }
+    if (!create) {
+      const index = userDataCopy.indexOf(payload);
+      userDataCopy[index] = data;
+    } else {
+      userDataCopy.push(data);
+    }
     Promise.all(
       userDataCopy.map((e) =>
         data.starred && userDataCopy.indexOf(e) != userDataCopy.indexOf(data)
@@ -69,6 +79,17 @@ export const PerformingArtsForm = ({ navigation, route }) => {
         })
     );
   };
+
+  const submitForm = () => {
+    onSubmitForm({
+      starred: starred,
+      name: name,
+      startDate: startDate,
+      endDate: endDate,
+      description: description ? description : "",
+    });
+    navigation.navigate("Profile");
+  };
   return (
     <EditBox>
       <Text style={[styles.titleText, { flex: 0 }]}>{title}</Text>
@@ -83,7 +104,7 @@ export const PerformingArtsForm = ({ navigation, route }) => {
             >
               <Text style={styles.subheading2Text}>Starred?</Text>
               <CheckBox
-                style={{ position: "relative", top: 10 }}
+                style={{ position: "relative", top: 10, left: 15 }}
                 value={starred}
                 onValueChange={setStarred}
                 color={starred ? colors.primary : undefined}
@@ -166,14 +187,12 @@ export const PerformingArtsForm = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.button, { backgroundColor: colors.primary }]}
             onPress={() => {
-              onSubmitForm({
-                starred: starred,
-                name: name,
-                startDate: startDate,
-                endDate: endDate,
-                description: description ? description : "",
-              });
-              navigation.navigate("Profile");
+              name && startDate && endDate
+                ? formSubmit()
+                : Alert.alert(
+                    "Submission Error",
+                    "Please make sure that you filled in all of the required fields."
+                  );
             }}
           >
             <Text style={styles.buttonText}>Save Changes</Text>

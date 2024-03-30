@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import React, { useState } from "react";
@@ -28,7 +29,7 @@ export const AwardsForm = ({ navigation, route }) => {
   const { colors } = useTheme();
   const styles = createStyleSheet(colors);
 
-  const { payload, title } = route.params;
+  const { payload, title, create } = route.params;
 
   const [starred, setStarred] = useState(payload.starred);
   const [itemTitle, setItemTitle] = useState(payload.title);
@@ -39,9 +40,18 @@ export const AwardsForm = ({ navigation, route }) => {
   );
 
   const onSubmitForm = (data) => {
-    const userDataCopy = [...userData.awards];
-    const index = userDataCopy.indexOf(payload);
-    userDataCopy[index] = data;
+    let userDataCopy = [];
+    if (userData.awards) {
+      userDataCopy = [...userData.awards];
+    } else {
+      userDataCopy = [];
+    }
+    if (!create) {
+      const index = userDataCopy.indexOf(payload);
+      userDataCopy[index] = data;
+    } else {
+      userDataCopy.push(data);
+    }
     Promise.all(
       userDataCopy.map((e) =>
         data.starred && userDataCopy.indexOf(e) != userDataCopy.indexOf(data)
@@ -69,6 +79,16 @@ export const AwardsForm = ({ navigation, route }) => {
         })
     );
   };
+  const submitForm = () => {
+    onSubmitForm({
+      starred: starred,
+      title: itemTitle,
+      provider: provider,
+      year: year,
+      description: description ? description : "",
+    });
+    navigation.navigate("Profile");
+  };
   return (
     <EditBox>
       <Text style={[styles.titleText, { flex: 0 }]}>{title}</Text>
@@ -83,7 +103,7 @@ export const AwardsForm = ({ navigation, route }) => {
             >
               <Text style={styles.subheading2Text}>Starred?</Text>
               <CheckBox
-                style={{ position: "relative", top: 10 }}
+                style={{ position: "relative", top: 10, left: 15 }}
                 value={starred}
                 onValueChange={setStarred}
                 color={starred ? colors.primary : undefined}
@@ -126,7 +146,7 @@ export const AwardsForm = ({ navigation, route }) => {
               defaultValue={String(payload.year)}
               placeholderTextColor={"gray"}
               keyboardAppearance="default"
-              keyboardType="phone-pad"
+              keyboardType="numeric"
               onChangeText={(text) => setYear(parseInt(text))}
               maxLength={4}
             />
@@ -165,14 +185,12 @@ export const AwardsForm = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.button, { backgroundColor: colors.primary }]}
             onPress={() => {
-              onSubmitForm({
-                starred: starred,
-                title: itemTitle,
-                provider: provider,
-                year: year,
-                description: description ? description : "",
-              });
-              navigation.navigate("Profile");
+              itemTitle && provider && year
+                ? submitForm()
+                : Alert.alert(
+                    "Submission Error",
+                    "Please make sure that you filled in all of the required fields."
+                  );
             }}
           >
             <Text style={styles.buttonText}>Save Changes</Text>

@@ -14,8 +14,6 @@ const EditItem = ({ starred, text, options }) => {
   const styles = createStyleSheet(colors);
   const [isModalVisible, setModalVisible] = useState(false);
 
-
-
   return (
     <>
       <View style={styles.box}>
@@ -28,7 +26,10 @@ const EditItem = ({ starred, text, options }) => {
           </Text>
         </View>
         <View style={styles.menuContainer}>
-          <VerticalDotMenuSVG style={styles.menu} onPress={() => setModalVisible(!isModalVisible)} />
+          <VerticalDotMenuSVG
+            style={styles.menu}
+            onPress={() => setModalVisible(!isModalVisible)}
+          />
           <ReactNativeModal isVisible={isModalVisible}>
             <View style={styles.popupContent}>
               <Text style={styles.titleText}>

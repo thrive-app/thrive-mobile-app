@@ -8,6 +8,7 @@ import auth from "@react-native-firebase/auth";
 import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import EditItem from "../../components/EditItem";
+import PlusSVG from "../../assets/svg/PlusSVG";
 
 export const AthleticsHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -58,15 +59,44 @@ export const AthleticsHome = ({ navigation, route }) => {
                   payload: item,
                   title: "Edit Athletics",
                 }),
-              trash: () =>
-                deleteItem(userData.athletics, "athletics", item),
+              trash: () => deleteItem(userData.athletics, "athletics", item),
             }}
           />
         )}
         keyExtractor={(item) => userData.athletics.indexOf(item)}
       />
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary }]}
+        style={[
+          styles.smallButton,
+          {
+            backgroundColor: colors.primary,
+            right: "20%",
+            width: 66,
+            height: 66,
+            borderRadius: 33,
+            left: "0%",
+            marginVertical: "10%",
+          },
+        ]}
+        onPress={() =>
+          navigation.navigate("AthleticsForm", {
+            payload: {
+              starred: false,
+              sport: "",
+              position: "",
+              startDate: "",
+              endDate: "",
+              description: "",
+            },
+            title: "Add Athletics",
+            create: true,
+          })
+        }
+      >
+        <PlusSVG width={36} height={36} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#c7c8c7" }]}
         onPress={() => navigation.navigate("Profile")}
       >
         <Text style={styles.buttonText}>Go Back</Text>

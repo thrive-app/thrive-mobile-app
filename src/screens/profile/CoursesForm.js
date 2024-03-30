@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -29,18 +30,18 @@ export const CoursesForm = ({ navigation, route }) => {
   const { colors } = useTheme();
   const styles = createStyleSheet(colors);
 
-  const { payload, title } = route.params;
+  const { payload, title, create } = route.params;
 
   const [name, setName] = useState(payload.name);
   const [type, setType] = useState(payload.type);
   const [isScore, setIsScore] = useState(
-    payload.score === -1 || payload.score === 0 ? false : true
+    payload.score === -1 || payload.score === 0 || payload.score === ""
+      ? false
+      : true
   );
   const [score, setScore] = useState(payload.score);
 
   function setTypeSwitch(val) {
-    console.log(val);
-    console.log(type);
     switch (val) {
       case "Regular":
         setType("R");
@@ -103,9 +104,18 @@ export const CoursesForm = ({ navigation, route }) => {
   ];
 
   const onSubmitForm = (data) => {
-    const userDataCopy = [...userData.courses];
-    const index = userDataCopy.indexOf(payload);
-    userDataCopy[index] = data;
+    let userDataCopy = [];
+    if (userData.courses) {
+      userDataCopy = [...userData.courses];
+    } else {
+      userDataCopy = [];
+    }
+    if (!create) {
+      const index = userDataCopy.indexOf(payload);
+      userDataCopy[index] = data;
+    } else {
+      userDataCopy.push(data);
+    }
 
     //update only affected DB fields (REST API PATCH)
     firestore()
@@ -125,6 +135,15 @@ export const CoursesForm = ({ navigation, route }) => {
           //close window
           .then(() => navigation.navigate("Profile"));
       });
+  };
+
+  const submitForm = () => {
+    onSubmitForm({
+      name: name,
+      type: type,
+      score: score ? score : -1,
+    });
+    navigation.navigate("Profile");
   };
   return (
     <EditBox>
@@ -205,14 +224,14 @@ export const CoursesForm = ({ navigation, route }) => {
           </View>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: colors.primary }]}
-            onPress={() => {
-              onSubmitForm({
-                name: name,
-                type: type,
-                score: score ? score : -1,
-              });
-              navigation.navigate("Profile");
-            }}
+            onPress={
+              name
+                ? submitForm()
+                : Alert.alert(
+                    "Submission Error",
+                    "Please make sure that you filled in all of the required fields."
+                  )
+            }
           >
             <Text style={styles.buttonText}>Save Changes</Text>
           </TouchableOpacity>

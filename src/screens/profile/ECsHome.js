@@ -8,6 +8,7 @@ import auth from "@react-native-firebase/auth";
 import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import EditItem from "../../components/EditItem";
+import PlusSVG from "../../assets/svg/PlusSVG";
 
 export const ECsHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -43,7 +44,9 @@ export const ECsHome = ({ navigation, route }) => {
 
   return (
     <EditBox>
-      <Text style={[styles.titleText, { flex: 0 }]}>Edit Extracurricular Activities/Clubs</Text>
+      <Text style={[styles.titleText, { flex: 0 }]}>
+        Edit Extracurricular Activities/Clubs
+      </Text>
 
       <FlatList
         style={{ flex: 1 }}
@@ -58,15 +61,44 @@ export const ECsHome = ({ navigation, route }) => {
                   payload: item,
                   title: "Edit Extracurricular Activities/Clubs",
                 }),
-              trash: () =>
-                deleteItem(userData.ecs, "ecs", item),
+              trash: () => deleteItem(userData.ecs, "ecs", item),
             }}
           />
         )}
         keyExtractor={(item) => userData.ecs.indexOf(item)}
       />
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary }]}
+        style={[
+          styles.smallButton,
+          {
+            backgroundColor: colors.primary,
+            right: "20%",
+            width: 66,
+            height: 66,
+            borderRadius: 33,
+            left: "0%",
+            marginVertical: "10%",
+          },
+        ]}
+        onPress={() =>
+          navigation.navigate("ECsForm", {
+            payload: {
+              starred: false,
+              name: "",
+              position: "",
+              startDate: "",
+              endDate: "",
+              description: "",
+            },
+            title: "Add an Extracurricular Activity/Club",
+            create: true,
+          })
+        }
+      >
+        <PlusSVG width={36} height={36} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#c7c8c7" }]}
         onPress={() => navigation.navigate("Profile")}
       >
         <Text style={styles.buttonText}>Go Back</Text>

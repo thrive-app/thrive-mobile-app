@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, FlatList } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import EditBox from "../../components/EditBox";
@@ -8,10 +8,15 @@ import auth from "@react-native-firebase/auth";
 import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import EditItem from "../../components/EditItem";
+import ReactNativeModal from "react-native-modal";
+import PlusSVG from "../../assets/svg/PlusSVG";
+import { Ionicons } from "@expo/vector-icons";
 
 export const AcademicsHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
   const dispatch = useDispatch();
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const { colors } = useTheme();
   const styles = createStyleSheet(colors);
@@ -42,21 +47,76 @@ export const AcademicsHome = ({ navigation, route }) => {
   }
 
   function typeSwitch(item) {
-    switch(item.type) {
-        case 'H':
-            return 'Honors'
-        case 'R':
-            return ''
-        case 'AP':
-            return 'AP'
-        default:
-            return ""
+    switch (item.type) {
+      case "H":
+        return "Honors";
+      case "R":
+        return "";
+      case "AP":
+        return "AP";
+      default:
+        return "";
     }
   }
 
   return (
     <EditBox>
-      <Text style={[styles.titleText, { flex: 0 }]}>Edit Courses</Text>
+      <ReactNativeModal isVisible={isModalVisible}>
+        <View style={styles.popupContent}>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: colors.primary, width: "60%" },
+            ]}
+            onPress={() =>
+              navigation.navigate("CoursesForm", {
+                payload: {
+                  name: "",
+                  type: "",
+                  score: "",
+                },
+                title: "Add Course",
+                create: true,
+              })
+            }
+          >
+            <Text style={[styles.buttonText, { fontFamily: "DMSansRegular" }]}>
+              Add <Text style={{ fontFamily: "DMSansBold" }}>Course</Text>
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: colors.primary, width: "60%" },
+            ]}
+            onPress={() =>
+              navigation.navigate("TestScoresForm", {
+                payload: {
+                  name: "",
+                  score: "",
+                },
+                title: "Add Test Score",
+                create: true,
+              })
+            }
+          >
+            <Text style={[styles.buttonText, { fontFamily: "DMSansRegular" }]}>
+              Add <Text style={{ fontFamily: "DMSansBold" }}>Test Score</Text>
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: "#c7c8c7", width: "40%" },
+            ]}
+            onPress={() => setModalVisible(!isModalVisible)}
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      </ReactNativeModal>
+      <Text style={[styles.titleText, { flex: 0 }]}>Edit Academics</Text>
       <Text style={styles.subheading2Text}>Courses</Text>
       <FlatList
         style={{ flex: 1 }}
@@ -69,9 +129,9 @@ export const AcademicsHome = ({ navigation, route }) => {
                 navigation.navigate("CoursesForm", {
                   payload: item,
                   title: "Edit Courses",
+                  create: false,
                 }),
-              trash: () =>
-                deleteItem(userData.courses, "courses", item),
+              trash: () => deleteItem(userData.courses, "courses", item),
             }}
           />
         )}
@@ -89,16 +149,33 @@ export const AcademicsHome = ({ navigation, route }) => {
                 navigation.navigate("TestScoresForm", {
                   payload: item,
                   title: "Edit Test Scores",
+                  create: false,
                 }),
-              trash: () =>
-                deleteItem(userData.testScores, "testScores", item),
+              trash: () => deleteItem(userData.testScores, "testScores", item),
             }}
           />
         )}
         keyExtractor={(item) => userData.testScores.indexOf(item)}
       />
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary, top: "10%" }]}
+        style={[
+          styles.smallButton,
+          {
+            backgroundColor: colors.primary,
+            right: "20%",
+            width: 66,
+            height: 66,
+            borderRadius: 33,
+            left: "0%",
+            marginTop: "10%",
+          },
+        ]}
+        onPress={() => setModalVisible(!isModalVisible)}
+      >
+        <PlusSVG width={36} height={36} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#c7c8c7", top: "10%" }]}
         onPress={() => navigation.navigate("Profile")}
       >
         <Text style={styles.buttonText}>Go Back</Text>

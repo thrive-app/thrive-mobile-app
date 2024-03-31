@@ -34,7 +34,7 @@
     <img src="/mad.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Thrive-Mobile App</h3>
+  <h3 align="center">Thrive</h3>
 
   <p align="center">
     An awesome README template to jumpstart your projects!
@@ -85,7 +85,7 @@
 
 Thrive is an application for the 2023-2024 FBLA Mobile App Development Event. 
 
-As high schoolers, we recently began exploring what we wanted to do for a living. However, as we started finding opportunities we were interested in, we struggled to develop portfolios that truly reflected who we were. As such, we felt that a dedicated platform for highschoolers such as ourselves to share their qualifications would be vital to their success. Thrive achieves that purpose by allowing students to put their extracurricular participation, coursework, volunteer experience, and more, on full display through a highly intuitive user experience.
+As high schoolers, we recently began exploring what we wanted to do for a living. However, as we started finding opportunities we were interested in, we struggled to develop portfolios that truly reflected who we were. As such, we felt that a dedicated platform for high schoolers such as ourselves to share their qualifications would be vital to their success. Thrive achieves that purpose by allowing students to put their extracurricular participation, coursework, volunteer experience, and more, on full display through a highly intuitive user experience.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

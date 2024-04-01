@@ -19,8 +19,6 @@
   <p align="center">
     ReadMe for Thrive Mobile Application
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
     ·

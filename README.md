@@ -1,12 +1,6 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
+
 
 
 
@@ -23,7 +17,7 @@
   <h3 align="center">Thrive</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    ReadMe for Thrive Mobile Application
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
     <br />
@@ -45,19 +39,11 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#technologies">Technologies</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -76,17 +62,37 @@ As high schoolers, we recently began exploring what we wanted to do for a living
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Features
+
+Some notable features of our app is that we have google sign on authentication as well as email login authentication. Another features is that we have profile customizability for the user, as they can edit their information and split their information among different sections of their profile. The user can also share their profile by exporting it as a pdf and emailing it to others. 
 
 
-### Built With
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+### Technologies
 
-* [![Node][Node.js]][Next-url]
-* [![React Native][React.js]][ReactNative-url]
-* [![FireBase][FireBaseImage]][FireBase-url]
-* [![Expo][ExpoImage]][Expo-url]
-* [![Figma][FigmaImage]][Figma-url]
+Frontend Framework: 
+
+* [Expo](https://docs.expo.dev/)
+* [React Native](https://reactnative.dev/)
+
+
+
+Backend Framework: 
+* [Firebase](https://rnfirebase.io/)
+
+
+
+Frontend Design: 
+* [Figma](https://www.figma.com/)
+
+
+
+
+
+
+
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -97,16 +103,25 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 
 
+
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [x] Add google login authentication
+- [x] Add gmail login authentication
+- [ ] Create home page
+- [ ] Add settings page
+    - [ ] Sign out option
+    - [ ] Toggle light/dark mode
+- [ ] Add custimizability to home page
+    - [ ] Firebase integration
+    - [ ] Edit button
+- [ ] Share features
+  - [ ] Expo Share feature
+  - [ ] Expo printPdf feature
+- [ ] User support
+  - [ ] Chat bot
+  - [ ] Report bugs page
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 

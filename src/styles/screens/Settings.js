@@ -41,6 +41,30 @@ const createStyleSheet = (colors) => {
       alignItems: "center",
       alignSelf: "center",
     },
+    inputText: {
+      fontSize: 12,
+      width: "75%",
+      left: 10,
+      color: colors.text,
+      fontFamily: "DMSansRegular",
+      padding: 5,
+      borderRadius: 16,
+      marginTop: "10%",
+      marginBottom: 10,
+      borderColor: "#ececec",
+      borderWidth: 1,
+      flex: 0,
+    },
+    button2: {
+      width: "90%",
+      borderRadius: 25,
+      height: 40,
+      marginVertical: 5,
+      marginHorizontal: "8%",
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: "center",
+    },
   });
 };
 

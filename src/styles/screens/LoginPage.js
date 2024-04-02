@@ -5,7 +5,7 @@ const createStyleSheet = (colors) => {
     image: {
       alignSelf: "center",
       padding: "20%",
-      marginTop: "15%",
+      marginTop: "10%",
     },
     text: {
       color: colors.text,
@@ -51,6 +51,25 @@ const createStyleSheet = (colors) => {
     tabView: {
       backgroundColor: colors.background,
       marginBottom: 15,
+    },
+    popupContent: {
+      backgroundColor: colors.background,
+      padding: 20,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: colors.primary,
+      height: "60%"
+    },
+    description: {
+      fontFamily: "DMSansMedium",
+      fontSize: 14,
+      flex: 1,
+      flexWrap: "wrap",
+      color: colors.subheading,
+      marginLeft: 10,
+      marginBottom: 5,
+      flexWrap: "wrap"
     },
   });
 };

@@ -27,7 +27,7 @@ export default function App() {
 
   const store = configureStore({
     reducer: {
-      store: dataReducer
+      store: dataReducer,
     },
   });
 

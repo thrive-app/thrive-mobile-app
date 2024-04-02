@@ -33,7 +33,7 @@ const createStyleSheet = (colors) => {
       fontSize: 11,
       flex: 1,
       flexWrap: "wrap",
-      color: "#696969",
+      color: colors.subheading,
       marginLeft: 5,
     },
     subheadingText: {
@@ -48,7 +48,7 @@ const createStyleSheet = (colors) => {
     subheading2Text: {
       fontFamily: "DMSansBold",
       fontSize: 16,
-      flex: 1,
+      flex: 0,
       flexWrap: "wrap",
       color: colors.subheading,
       marginLeft: 10,
@@ -84,7 +84,7 @@ const createStyleSheet = (colors) => {
     },
     inputText: {
       fontSize: 12,
-      color: "#000000",
+      color: colors.text,
       fontFamily: "DMSansRegular",
       padding: 5,
       borderRadius: 16,
@@ -108,6 +108,38 @@ const createStyleSheet = (colors) => {
       justifyContent: "center",
       alignItems: "center",
       alignSelf: "center",
+    },
+    smallButton: {
+      width: 44,
+      borderRadius: 22,
+      height: 44,
+      marginHorizontal: "8%",
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: "center",
+      flex: 0,
+    },
+    smallButtonContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      marginVertical: "5%",
+    },
+    popupContent: {
+      backgroundColor: colors.background,
+      padding: 20,
+      height: "50%",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: colors.primary,
+    },
+    backButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 25,
+      width: "10%",
+      marginLeft: 20,
+      margin: 75,
+      alignItems: "center",
     },
   });
 };

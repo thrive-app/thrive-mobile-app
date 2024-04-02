@@ -1,5 +1,11 @@
-import { Text, View, Image, FlatList, Button } from "react-native";
-import React from "react";
+import {
+  Text,
+  View,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,43 +20,21 @@ import GroupSVG from "../../assets/svg/GroupSVG";
 import MedalSVG from "../../assets/svg/MedalSVG";
 import TheaterSVG from "../../assets/svg/TheaterSVG";
 import StarSVG from "../../assets/svg/StarSVG";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 //import { LinearGradient } from "expo-linear-gradient"
 //import { gradient } from "../themes";
 import createStyleSheet from "../../styles/screens/Profile";
 import findStarred from "../../functions/profile/findStarred";
-import { printToFileAsync } from "expo-print";
-import { shareAsync } from "expo-sharing";
+import ReactNativeModal from "react-native-modal";
+import ShareIcon1SVG from "../../assets/svg/ShareIcon1SVG";
 
-//html for pdf file
-const html = `
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  </head>
-  <body style="text-align: center;">
-    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-      Hello Expo!
-    </h1>
-    <img
-      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-      style="width: 90vw;" />
-    </body>
-</html>`;
-
-//generate pdf function
-const printToFile = async () => {
-  // On iOS/android prints the given html. On web prints the HTML from the current page.
-  const { uri } = await printToFileAsync({ html });
-  console.log("File has been saved to:", uri);
-  await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
-};
 
 const Profile = ({ route, navigation }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
-  const dispatch = useDispatch();
 
   const { colors } = useTheme();
+
+  const [helpBox, setHelpBox] = useState(false);
 
   const styles = createStyleSheet(colors);
 
@@ -217,7 +201,10 @@ const Profile = ({ route, navigation }) => {
     : null;
 
   const generalInfoBox = (
-    <ContentBox onPress={() => navigation.navigate("EditGeneralInfo")}>
+    <ContentBox
+      onPressHelp={() => setHelpBox(!helpBox)}
+      onPress={() => navigation.navigate("EditGeneralInfo")}
+    >
       <View style={{ flex: 1, flexDirection: "row" }}>
         <Image
           source={{
@@ -426,19 +413,62 @@ const Profile = ({ route, navigation }) => {
     ecsBox,
     performingArtsBox,
     awardsBox,
-    <Button title="share pdf" onPress={printToFile} />,
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Share")}
+      style={[
+        styles.button,
+        {
+          top: "5%",
+          height: 50,
+          backgroundColor: colors.primary,
+          flexDirection: "row",
+          width: "60%",
+          borderRadius: 25
+        },
+      ]}
+    >
+      <ShareIcon1SVG
+        style={{ right: 10 }}
+        width={28}
+        height={28}
+        color="#fff"
+      />
+      <Text style={[styles.buttonText, { fontSize: 18 }]}>Share Portfolio</Text>
+    </TouchableOpacity>,
     <View style={{ height: 150 }} />,
   ];
+
+  const HelpBox = () => (
+    <>
+      <ReactNativeModal isVisible={helpBox}>
+        <View style={styles.popupContent}>
+          <Text style={[styles.titleText, { flex: 0, fontSize: 22 }]}>
+            Help
+          </Text>
+
+          <Text style={[styles.description, { textAlign: "center" }]}>
+            This is the profile page! Here, you can add, edit, and share all of
+            your qualifications. This first box consists of your general
+            information and starred items.
+          </Text>
+          <TouchableOpacity
+            onPress={() => setHelpBox(!helpBox)}
+            style={[styles.button, { backgroundColor: colors.primary }]}
+          >
+            <Text style={[styles.buttonText, { alignSelf: "center" }]}>
+              Sounds good, thanks!
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ReactNativeModal>
+    </>
+  );
 
   return (
     <>
       <SafeAreaView style={styles.container}>
         <GestureHandlerRootView>
-          <Header
-            onPress={() => {
-              navigation.navigate("Settings");
-            }}
-          >
+          <Header>
             <SettingsSVG
               width={40}
               height={40}
@@ -448,20 +478,16 @@ const Profile = ({ route, navigation }) => {
               }}
             />
           </Header>
+          {HelpBox()}
           <FlatList
             data={boxes}
             renderItem={({ item }) => item}
             keyExtractor={(item) => boxes.indexOf(item)}
           />
-          <View>
-            <Button title="share pdf" onPress={printToFile} />
-          </View>
         </GestureHandlerRootView>
       </SafeAreaView>
     </>
   );
 };
-
-export const CoursesForm = ({ navigation, route }) => {};
 
 export default Profile;

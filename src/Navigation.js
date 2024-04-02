@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { TransitionPresets } from "@react-navigation/stack";
 import AwardsHome from "./screens/profile/AwardsHome";
 import AwardsForm from "./screens/profile/AwardsForm";
+import Share from "./screens/profile/Share";
 
 export default function Navigation() {
   const { theme } = useContext(ThemeContext);
@@ -134,6 +135,7 @@ const RootNavigator = () => {
             />
             <Stack.Screen name="AwardsHome" component={AwardsHome} />
             <Stack.Screen name="AwardsForm" component={AwardsForm} />
+            <Stack.Screen name="Share" component={Share} />
           </Stack.Group>
         </>
       ) : (

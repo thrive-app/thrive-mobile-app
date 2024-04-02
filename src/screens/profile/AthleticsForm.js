@@ -5,6 +5,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Alert,
+  StatusBar
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import { Ionicons } from "@expo/vector-icons";
 import HomeSVG from "../../assets/svg/HomeSVG";
+import HelpSVG from "../../assets/svg/HelpSVG";
 
 export const AthleticsForm = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -94,7 +96,12 @@ export const AthleticsForm = ({ navigation, route }) => {
   };
   return (
     <EditBox>
-      <Text style={[styles.titleText, { flex: 0 }]}>{title}</Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.titleText}>{title}</Text>
+        <View style={{ top: StatusBar.currentHeight }}>
+          <HelpSVG />
+        </View>
+      </View>
       <GestureHandlerRootView>
         <ScrollView>
           <KeyboardAvoidingView>

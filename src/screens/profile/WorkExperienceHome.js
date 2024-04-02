@@ -1,4 +1,10 @@
-import { Text, View, TouchableOpacity, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +15,7 @@ import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
 import EditItem from "../../components/EditItem";
 import PlusSVG from "../../assets/svg/PlusSVG";
+import HelpSVG from "../../assets/svg/HelpSVG";
 
 export const WorkExperienceHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -44,14 +51,11 @@ export const WorkExperienceHome = ({ navigation, route }) => {
 
   return (
     <EditBox>
-      <View
-        style={{
-          flexDirection: "row",
-        }}
-      >
-        <Text style={[styles.titleText, { flex: 0 }]}>
-          Edit Work Experience
-        </Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.titleText}>Edit Work Experience</Text>
+        <View style={{ top: StatusBar.currentHeight }}>
+          <HelpSVG />
+        </View>
       </View>
 
       <FlatList

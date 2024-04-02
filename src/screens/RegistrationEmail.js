@@ -119,7 +119,7 @@ const RegistrationEmail = ({ navigation, route }) => {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : null}
       >
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {marginHorizontal: 20}]}>
           <GestureHandlerRootView>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={{ justifyContent: "flex-end", paddingTop: "30%" }}>

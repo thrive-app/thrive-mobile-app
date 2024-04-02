@@ -1,4 +1,10 @@
-import { Text, View, TouchableOpacity, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +17,7 @@ import EditItem from "../../components/EditItem";
 import ReactNativeModal from "react-native-modal";
 import PlusSVG from "../../assets/svg/PlusSVG";
 import { Ionicons } from "@expo/vector-icons";
+import HelpSVG from "../../assets/svg/HelpSVG";
 
 export const AcademicsHome = ({ navigation, route }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -116,7 +123,12 @@ export const AcademicsHome = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ReactNativeModal>
-      <Text style={[styles.titleText, { flex: 0 }]}>Edit Academics</Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.titleText}>Edit Academics</Text>
+        <View style={{ top: StatusBar.currentHeight }}>
+          <HelpSVG />
+        </View>
+      </View>
       <Text style={styles.subheading2Text}>Courses</Text>
       <FlatList
         style={{ flex: 1 }}

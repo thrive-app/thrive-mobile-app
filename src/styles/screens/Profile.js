@@ -127,10 +127,19 @@ const createStyleSheet = (colors) => {
     popupContent: {
       backgroundColor: colors.background,
       padding: 20,
+      height: "50%",
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 4,
       borderColor: colors.primary,
+    },
+    backButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 25,
+      width: "10%",
+      marginLeft: 20,
+      margin: 75,
+      alignItems: "center",
     },
   });
 };

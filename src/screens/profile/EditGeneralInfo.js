@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, TextInput, StatusBar } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import {
@@ -11,6 +11,7 @@ import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 import { updateUser } from "../../redux/state";
 import createStyleSheet from "../../styles/screens/Profile";
+import HelpSVG from "../../assets/svg/HelpSVG";
 
 export const EditGeneralInfo = ({ navigation }) => {
   const userData = useSelector((sample) => sample.store.value.userData);
@@ -46,7 +47,13 @@ export const EditGeneralInfo = ({ navigation }) => {
     <EditBox>
       <GestureHandlerRootView>
         <ScrollView style={{ bottom: 8 }}>
-          <Text style={styles.titleText}>Edit General Info</Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.titleText}>Edit General Info</Text>
+            <View style={{top: StatusBar.currentHeight}}>
+            <HelpSVG />
+            </View>
+          </View>
+
           <Text style={styles.subheading2Text}>
             School<Text style={{ color: "red" }}>*</Text>
           </Text>

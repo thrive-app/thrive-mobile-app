@@ -17,7 +17,7 @@
   <h3 align="center">Thrive</h3>
 
   <p align="center">
-    ReadMe for Thrive Mobile Application
+    README for Thrive Mobile Application
     <br />
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
@@ -42,14 +42,14 @@
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#acknowledgments">Acknowledgments & Copyright Compliance</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## 📜 About The Project
 
 Thrive is an application for the 2023-2024 FBLA Mobile App Development Event. 
 
@@ -58,14 +58,14 @@ As high schoolers, we recently began exploring what we wanted to do for a living
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Features
+### 📈 Features
 
 Some notable features of our app is that we have google sign on authentication as well as email login authentication. Another features is that we have profile customizability for the user, as they can edit their information and split their information among different sections of their profile. The user can also share their profile by exporting it as a pdf and emailing it to others. 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Technologies
+### 🖥 Technologies
 
 Frontend Framework: 
 
@@ -101,25 +101,28 @@ Frontend Design:
 
 
 <!-- ROADMAP -->
-## Roadmap
+## ⏳ Roadmap
 
-- [x] Add google login authentication
-- [x] Add gmail login authentication
-- [ ] Create home page
-- [ ] Add settings page
-    - [ ] Sign out option
-    - [ ] Toggle light/dark mode
-- [ ] Add custimizability to home page
-    - [ ] Firebase integration
-    - [ ] Edit button
-- [ ] Share features
-  - [ ] Expo Share feature
-  - [ ] Expo printPdf feature
+- [x] Add Google login authentication
+- [x] Add email login authentication
+- [x] Create home page
+- [x] Add settings page
+    - [x] Sign out option
+    - [x] Toggle light/dark mode
+- [x] Add customizability to home page
+    - [x] Firebase integration
+    - [x] Edit button
+- [x] Share features
+  - [x] Exportable PDF
 - [ ] User support
   - [ ] Chat bot
   - [ ] Report bugs page
+- [ ] Networking
+  - [ ] Privacy Policy
+  - [ ] Ability to view others' profiles and connect
+  - [ ] Discussion forum w/ threads
+  - [ ] Embedded Medium Blog 
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -153,14 +156,17 @@ Project Link: [https://github.com/akshay-p-123/thrive](https://github.com/akshay
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-
+All of these resources are open-source. We would like to thank them for making Thrive possible.
 
 * [Choose an Open Source License](https://choosealicense.com)
 * [Expo Documentation](https://docs.expo.dev/)
 * [Core Components and Native Components](https://reactnative.dev/docs/intro-react-native-components)
 * [Firebase Documentation](https://rnfirebase.io/)
 * [Google Material Icons](https://fonts.google.com/icons)
-* [ReadMe Template](https://github.com/othneildrew/Best-README-Template)
+* [Redux Documentation](https://redux.js.org/)
+* [React Navigation](https://reactnavigation.org/)
+* [SVG to JSX converter](https://www.svgviewer.dev/)
+* [README Template](https://github.com/othneildrew/Best-README-Template)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

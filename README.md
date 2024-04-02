@@ -10,11 +10,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="/mad.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/thrive-app/thrive-mobile-app">
+    <img src="/logo_full.png" alt="Logo">
   </a>
 
-  <h3 align="center">Thrive</h3>
 
   <p align="center">
     README for Thrive Mobile Application

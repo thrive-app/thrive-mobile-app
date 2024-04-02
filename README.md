@@ -133,7 +133,7 @@ Frontend Design:
 
 
 <!-- LICENSE -->
-## License
+## 💼 License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
@@ -142,7 +142,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+## 📬 Contact
 
 Akshay Pespunuri  - akshay.pespunuri@gmail.com
 Aditya Chalasani - 31adi31@gmail.com
@@ -154,7 +154,7 @@ Project Link: [https://github.com/akshay-p-123/thrive](https://github.com/akshay
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 🙌 Acknowledgments
 
 All of these resources are open-source. We would like to thank them for making Thrive possible.
 

@@ -198,7 +198,7 @@ const Share = ({ navigation, route }) => {
           { backgroundColor: colors.primary, width: "60%", height: 50 },
         ]}
       >
-        <Text style={[styles.buttonText, { fontSize: 20 }]}>Share PDF</Text>
+        <Text style={[styles.buttonText, { fontSize: 20 }]}>Create PDF</Text>
       </TouchableOpacity>
     </View>
   );

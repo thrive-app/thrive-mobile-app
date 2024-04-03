@@ -87,16 +87,6 @@ const LoginPage = ({ navigation }) => {
         <AntDesign name="google" size={28} color="white" style={styles.icons} />
         <Text style={styles.buttonText}>Register with Google</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button}>
-        <MaterialCommunityIcons
-          name="apple"
-          size={30}
-          color="white"
-          style={styles.icons}
-        />
-        <Text style={styles.buttonText}>Register with Apple</Text>
-      </TouchableOpacity>
     </>
   );
 
@@ -118,16 +108,6 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={onGoogleLogin}>
         <AntDesign name="google" size={28} color="white" style={styles.icons} />
         <Text style={styles.buttonText}>Sign in with Google</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button}>
-        <MaterialCommunityIcons
-          name="apple"
-          size={30}
-          color="white"
-          style={styles.icons}
-        />
-        <Text style={styles.buttonText}>Sign in with Apple</Text>
       </TouchableOpacity>
     </>
   );
@@ -197,7 +177,7 @@ const LoginPage = ({ navigation }) => {
               <Text
                 style={{
                   color: colors.text,
-                  margin: 8,
+                  margin: 20,
                   fontSize: 18,
                   fontFamily: "DMSansMedium",
                 }}

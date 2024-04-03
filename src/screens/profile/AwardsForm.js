@@ -192,12 +192,17 @@ export const AwardsForm = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.button, { backgroundColor: colors.primary }]}
             onPress={() => {
-              itemTitle && provider && year
-                ? submitForm()
-                : Alert.alert(
-                    "Submission Error",
-                    "Please make sure that you filled in all of the required fields."
-                  );
+              !(itemTitle && provider && year)
+                ? Alert.alert(
+                  "Submission Error",
+                  "Please make sure that you filled in all of the required fields."
+                )
+                : String(year).length != 4
+                ? Alert.alert(
+                  "Submission Error",
+                  "The year is not in the correct format (YYYY). "
+                ) 
+                : submitForm()
             }}
           >
             <Text style={styles.buttonText}>Save Changes</Text>

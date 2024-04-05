@@ -365,6 +365,7 @@ const Profile = ({ route, navigation }) => {
     </ContentBox>
   );
 
+  //this is a custom implementation for the extracurricular box.
   const ecsBox = (
     <ContentBox onPress={() => navigation.navigate("ECsHome")}>
       <Text style={styles.titleText}>Extracurricular Activities/Clubs</Text>
